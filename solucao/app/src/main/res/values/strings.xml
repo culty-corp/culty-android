@@ -19,6 +19,7 @@
     <string name="password">Senha</string>
     <string name="remind_account">Lembrar?</string>
     <string name="register">Registrar</string>
+    <string name="filters">Filtros</string>
     <string name="filters_description">Adicione novos filtros</string>
     <string name="upload">Postar</string>
     <string name="profile">Perfil</string>
