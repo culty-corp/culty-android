@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Culty</string>
     <string name="action_settings">Opções</string>
+    <string name="abrirOpcoes">Mostrar Opções</string>
+    <string name="fecharOpcoes">Esconder Opções</string>
     <string name="artist">Artista</string>
     <string name="artists">Artistas</string>
     <string name="content">Conteúdo</string>
