@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-            tools:showIn="navigation_view">
+      tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item android:title="">
-            <menu>
-                <item android:id="@+id/nav_explore"
-                      android:icon="@drawable/ic_explore_orange_24dp"
-                      android:title="@string/explore"/>
-                <item android:id="@+id/nav_following"
-                      android:icon="@drawable/ic_heart_orange_24dp"
-                      android:title="@string/following"/>
-                <item android:id="@+id/nav_artists"
-                      android:icon="@drawable/ic_group_orange_24dp"
-                      android:title="@string/artists"/>
-            </menu>
-        </item>
-
+    <group android:id="@+id/nav_group_general">
+        <item android:id="@+id/nav_explore"
+              android:icon="@drawable/ic_explore_orange_24dp"
+              android:title="@string/explore"/>
+        <item android:id="@+id/nav_following"
+              android:icon="@drawable/ic_heart_orange_24dp"
+              android:title="@string/following"/>
+        <item android:id="@+id/nav_artists"
+              android:icon="@drawable/ic_group_orange_24dp"
+              android:title="@string/artists"/>
+    </group>
+    <group android:id="@+id/nav_group_login">
         <item android:id="@+id/login"
               android:icon="@drawable/ic_login_24dp"
               android:title="@string/log_in"/>
+    </group>
+    <group android:id="@+id/nav_group_useroptions">
         <item android:id="@+id/upload"
               android:icon="@drawable/ic_send_orange_24dp"
               android:title="@string/upload"/>
@@ -30,5 +29,4 @@
               android:icon="@drawable/ic_lock_orange_24dp"
               android:title="@string/log_out"/>
     </group>
-
 </menu>

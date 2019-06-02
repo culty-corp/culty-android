@@ -2,16 +2,13 @@ package com.github.cultycorp.cultyandroid
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import android.widget.Toolbar
-
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -27,6 +24,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         var navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
+        hideDrawerItems(navigationView)
 
         var toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.abrirOpcoes, R.string.fecharOpcoes)
         drawer.addDrawerListener(toggle)
@@ -70,6 +68,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun hideDrawerItems(nav : NavigationView) {
+        //Se usuario estiver logado
+        if (true) {
+            nav.menu.findItem(R.id.login).isVisible = false
+
+            nav.menu.findItem(R.id.logout).isVisible = true
+            nav.menu.findItem(R.id.profile).isVisible = true
+            nav.menu.findItem(R.id.upload).isVisible = true
+        }
+        else {
+            nav.menu.findItem(R.id.login).isVisible = true
+
+            nav.menu.findItem(R.id.logout).isVisible = false
+            nav.menu.findItem(R.id.profile).isVisible = false
+            nav.menu.findItem(R.id.upload).isVisible = false
         }
     }
 }
