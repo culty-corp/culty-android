@@ -10,4 +10,5 @@
     <color name="corLaranjaEscuro">#FF8C00</color>
     <color name="corLaranjaHover">#D67D00</color>
     <color name="corTexto">#ECF2EC</color>
+    <color name="corTextoHint">#aeafae</color>
 </resources>

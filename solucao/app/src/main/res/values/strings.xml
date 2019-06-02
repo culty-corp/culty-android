@@ -13,12 +13,6 @@
     <string name="explore">Explorar</string>
     <string name="follow">Seguir</string>
     <string name="following">Seguindo</string>
-    <string name="log_in">Entrar</string>
-    <string name="log_out">Sair</string>
-    <string name="email">E-mail</string>
-    <string name="password">Senha</string>
-    <string name="remind_account">Lembrar?</string>
-    <string name="register">Registrar</string>
     <string name="filters">Filtros</string>
     <string name="filters_description">Adicione novos filtros</string>
     <string name="upload">Postar</string>
@@ -27,4 +21,20 @@
     <string name="app_policy">Política do Aplicativo</string>
     <string name="privacy_policy">Política de Privacidade</string>
     <string name="copyright">© 2019 Culty. Todos os direitos reservados.</string>
+    <!-- LOGIN -->
+    <string name="log_in">Entrar</string>
+    <string name="log_out">Sair</string>
+    <string name="title_activity_login">Entrar</string>
+    <string name="prompt_email">E-mail</string>
+    <string name="prompt_password">Senha</string>
+    <string name="action_sign_in">Entrar or Registrar</string>
+    <string name="action_sign_in_short">Entrar</string>
+    <string name="welcome">"Bem-vindo!"</string>
+    <string name="invalid_username">Nome de usuário inválido!</string>
+    <string name="invalid_password">A senha precisa ter mais de 5 caracteres</string>
+    <string name="login_failed">"Opa! Não foi possível fazer isso. (Erro #001)"</string>
+    <string name="register_hint">"Não possui uma conta?</string>
+    <string name="remind_account">Lembrar?</string>
+    <string name="register">Registrar</string>
+    <string name="forgot_password">Esqueci minha senha</string>
 </resources>
