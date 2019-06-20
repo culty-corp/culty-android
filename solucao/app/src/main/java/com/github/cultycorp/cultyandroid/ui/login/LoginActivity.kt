@@ -3,6 +3,7 @@ package com.github.cultycorp.cultyandroid.ui.login
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
@@ -14,7 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
-
+import com.github.cultycorp.cultyandroid.MainActivity
 
 
 class LoginActivity : AppCompatActivity() {
@@ -51,16 +52,27 @@ class LoginActivity : AppCompatActivity() {
             val loginResult = it ?: return@Observer
 
             loading.visibility = View.GONE
-            if (loginResult.error != null) {
-                showLoginFailed(loginResult.error)
+//            if (loginResult.error != null) {
+//                showLoginFailed(loginResult.error)
+//            }
+//            if (loginResult.success != null) {
+//                updateUiWithUser(loginResult.success)
+//            }
+//            setResult(Activity.RESULT_OK)
+
+            if(username.text.toString().equals("admin") && password.text.toString().equals("123456")) {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("usuarioLogado", true)
+                startActivity(intent)
+                finish()
+            } else {
+                Toast.makeText(this, "Senha incorreta, bestinha!", Toast.LENGTH_SHORT).show()
             }
-            if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
-            }
-            setResult(Activity.RESULT_OK)
+
+
 
             //Complete and destroy login activity once successful
-            finish()
+
         })
 
         username.afterTextChanged {

@@ -11,8 +11,14 @@ class LoginDataSource {
     fun login(username: String, password: String): Result<LoggedInUser> {
         try {
             // TODO: handle loggedInUser authentication
-            val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString(), "Jane Doe")
-            return Result.Success(fakeUser)
+            if(username == "admin" && password == "123456") {
+                val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString(), "Administrador")
+                return Result.Success(fakeUser)
+            } else {
+                val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString(), "Usuário e senha inválidos")
+                return Result.Falha(fakeUser)
+            }
+            return Result.Error(IllegalArgumentException("Usuário e senha inválidos"))
         } catch (e: Throwable) {
             return Result.Error(IOException("Error logging in", e))
         }

@@ -1,5 +1,6 @@
 package com.github.cultycorp.cultyandroid
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
@@ -9,11 +10,13 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.github.cultycorp.cultyandroid.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var drawer : DrawerLayout
+    private lateinit  var sessao: SessaoModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +25,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer = findViewById(R.id.drawer_layout)
 
+        sessao = SessaoModel()
+        val usuarioLogado = intent.getBooleanExtra("usuarioLogado", sessao.usuarioLogado)
+        sessao.usuarioLogado = usuarioLogado
+
         var navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
         hideDrawerItems(navigationView)
@@ -29,23 +36,33 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.abrirOpcoes, R.string.fecharOpcoes)
         drawer.addDrawerListener(toggle)
         toggle.syncState()
-/*        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }*/
+
+        if(savedInstanceState == null) {
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ConteudoFragment()).commit()
+            navigationView.setCheckedItem(R.id.nav_explore)
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         var id = item.itemId
         when (id) {
-            R.id.nav_explore -> Toast.makeText(this, "Explorar tudo aqui!", Toast.LENGTH_SHORT).show()
+            R.id.nav_explore -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ConteudoFragment()).commit()
             R.id.nav_following -> Toast.makeText(this, "Vamos seguir todo mundo!", Toast.LENGTH_SHORT).show()
             R.id.nav_artists -> Toast.makeText(this, "Artistas de araque!", Toast.LENGTH_SHORT).show()
-            R.id.login -> Toast.makeText(this, "Vamos entrando!", Toast.LENGTH_SHORT).show()
-            R.id.login -> Toast.makeText(this, "Vamos entrando!", Toast.LENGTH_SHORT).show()
+            R.id.login -> {
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
             R.id.upload -> Toast.makeText(this, "Vamos mandar trem!", Toast.LENGTH_SHORT).show()
-            R.id.profile -> Toast.makeText(this, "Olha seu perfil!", Toast.LENGTH_SHORT).show()
-            R.id.logout -> Toast.makeText(this, "Vai embora, ingrato!", Toast.LENGTH_SHORT).show()
+            R.id.profile -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, PerfilFragment()).commit()
+            R.id.logout -> {
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
         drawer.closeDrawer(Gravity.START)
         return true
@@ -73,7 +90,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun hideDrawerItems(nav : NavigationView) {
         //Se usuario estiver logado
-        if (true) {
+        if (sessao.usuarioLogado) {
             nav.menu.findItem(R.id.login).isVisible = false
 
             nav.menu.findItem(R.id.logout).isVisible = true

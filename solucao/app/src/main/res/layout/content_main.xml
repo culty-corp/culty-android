@@ -9,6 +9,6 @@
         tools:showIn="@layout/activity_main"
         tools:context=".MainActivity">
 
-    <include layout="@layout/conteudo" tools:layout_editor_absoluteY="276dp" tools:layout_editor_absoluteX="-127dp"/>
+    <!--<include layout="@layout/conteudo" tools:layout_editor_absoluteY="276dp" tools:layout_editor_absoluteX="-127dp"/>-->
 
 </android.support.constraint.ConstraintLayout>
