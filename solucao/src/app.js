@@ -6,16 +6,20 @@
  * according to the signed in status of the user
  */
 
-import React, { Component } from 'react';
+import React, { Text, Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
-import { Navigator } from 'react-native-deprecated-custom-components';
+import {
+  Navigator,
+  NavigationBar
+} from 'react-native-deprecated-custom-components';
 
 // import the login screen view and
 // add it as the first component to render
 // added HomeScreen to debug
 import LoginScreen from './views/login_screen';
 import HomeScreen from './views/home_screen';
+import Routes from './routes';
 
 // import firebase to determine which view to display
 import { firebaseApp } from './firebase';
@@ -30,30 +34,42 @@ class App extends Component {
   render() {
     // base route stack to render
     // based on signed status of the user
-    let navigator;
-    if (this.props.currentUser.signInStatus) {
-      navigator = (
-        <Navigator
-          style={{ flex: 1 }}
-          initialRoute={this.routes[1]}
-          initialRouteStack={this.routes}
-          renderScene={this.renderScene}
-          configureScene={this.configureScene}
-        />
-      );
-    } else {
-      navigator = (
-        <Navigator
-          style={{ flex: 1 }}
-          initialRoute={this.routes[0]}
-          initialRouteStack={this.routes}
-          renderScene={this.renderScene}
-          configureScene={this.configureScene}
-        />
-      );
-    }
-
-    return <View style={{ flex: 1 }}>{navigator}</View>;
+    // let navigator;
+    // navigator = (
+    //   <Navigator
+    //     style={{ flex: 1 }}
+    //     initialRoute={this.routes[1]}
+    //     initialRouteStack={this.routes}
+    //     renderScene={this.renderScene}
+    //     configureScene={this.configureScene}
+    //   />
+    // );
+    // if (this.props.currentUser.signInStatus) {
+    //   navigator = (
+    //     <Navigator
+    //       style={{ flex: 1 }}
+    //       initialRoute={this.routes[1]}
+    //       initialRouteStack={this.routes}
+    //       renderScene={this.renderScene}
+    //       configureScene={this.configureScene}
+    //     />
+    //   );
+    // } else {
+    //   navigator = (
+    //     <Navigator
+    //       style={{ flex: 1 }}
+    //       initialRoute={this.routes[0]}
+    //       initialRouteStack={this.routes}
+    //       renderScene={this.renderScene}
+    //       configureScene={this.configureScene}
+    //     />
+    //   );
+    // }
+    return (
+      <View style={{ flex: 1 }}>
+        <Routes />
+      </View>
+    );
   }
 
   renderScene(route, navigator) {

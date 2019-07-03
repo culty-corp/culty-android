@@ -2,7 +2,7 @@
  * the universal timeline
  */
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -11,109 +11,134 @@ import {
   LayoutAnimation,
   Platform,
   UIManager,
-  RefreshControl
-} from 'react-native'
-import _ from 'lodash'
-import moment from 'moment'
-import { connect } from 'react-redux'
-import { savePosts } from '../../actions'
-import { getColor } from '../config'
-import { firebaseApp } from '../../firebase'
-import Post from './post'
+  RefreshControl,
+  Image
+} from 'react-native';
+import _ from 'lodash';
+import moment from 'moment';
+import { connect } from 'react-redux';
+import { savePosts } from '../../actions';
+import { getColor } from '../config';
+import { firebaseApp } from '../../firebase';
+import Post from './post';
 
 class Timeline extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental(true)
+      UIManager.setLayoutAnimationEnabledExperimental(true);
     }
 
     this.state = {
       isRefreshing: false,
       updateNotification: null
-    }
+    };
   }
 
+  static navigationOptions = {
+    drawerLabel: 'Timeline',
+    drawerIcon: ({ activeTintColor }) => (
+      <Image
+        source={require('../../assets/images/leek.png')}
+        style={[styles.icon, { activeTintColor: activeTintColor }]}
+      />
+    )
+  };
+
   componentDidMount() {
-    firebaseApp.database().ref('posts/').once('value').then((snapshot) => {
-      // this.setState({posts: snapshot.val()})
-      this.props.savePosts(snapshot.val())
-    }).catch(() => { })
+    firebaseApp
+      .database()
+      .ref('posts/')
+      .once('value')
+      .then(snapshot => {
+        // this.setState({posts: snapshot.val()})
+        this.props.savePosts(snapshot.val());
+      })
+      .catch(err => {
+        console.log(err);
+      });
 
     setTimeout(() => {
-      this.setState({ updateNotification: 'Pull to refresh...' })
-    }, 10000)
+      this.setState({ updateNotification: 'Pull to refresh...' });
+    }, 10000);
   }
 
   componentDidUpdate() {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
   }
 
   _onRefresh() {
-    this.setState({ isRefreshing: true })
+    this.setState({ isRefreshing: true });
 
-    firebaseApp.database().ref('posts/').once('value').then((snapshot) => {
-      this.props.savePosts(snapshot.val())
-      this.setState({isRefreshing: false, updateNotification: null})
-    })
+    firebaseApp
+      .database()
+      .ref('posts/')
+      .once('value')
+      .then(snapshot => {
+        this.props.savePosts(snapshot.val());
+        this.setState({ isRefreshing: false, updateNotification: null });
+      })
+      .catch(err => {
+        this.setState({
+          isRefreshing: false,
+          updateNotification: 'Pull to refresh...'
+        });
+        alert('No updates. :(');
+        console.log(err);
+      });
   }
 
   render() {
-    const notify = this.state.updateNotification ?
-    <Text style={styles.updateNotificationStyle}>
-      {this.state.updateNotification}
-    </Text>
-    : null
+    const notify = this.state.updateNotification ? (
+      <Text style={styles.updateNotificationStyle}>
+        {this.state.updateNotification}
+      </Text>
+    ) : null;
 
-    const view = this.props.posts ?
+    const view = this.props.posts ? (
       <ScrollView
-      refreshControl={
-        <RefreshControl
-          refreshing={this.state.isRefreshing}
-          onRefresh={this._onRefresh.bind(this)}
-          tintColor="#ff0000"
-          title="Loading..."
-          titleColor="#00ff00"
-          colors={[getColor()]}
-          progressBackgroundColor={getColor('#ffffff')}
-        />
-      }>
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.isRefreshing}
+            onRefresh={this._onRefresh.bind(this)}
+            activeTintColor="#ff0000"
+            title="Loading..."
+            titleColor="#00ff00"
+            colors={[getColor()]}
+            progressBackgroundColor={getColor('#ffffff')}
+          />
+        }
+      >
+        {notify}
 
-      {notify}
-
-      {this.renderPosts()}
-
+        {this.renderPosts()}
       </ScrollView>
-
-    :
-    <View style={styles.waitView}>
-      <Text>Getting universal timeline...</Text>
-    </View>
-
-    return (
-      <View style={styles.container}>
-        {view}
+    ) : (
+      <View style={styles.waitView}>
+        <Text>Getting universal timeline...</Text>
       </View>
-    )
+    );
+
+    return <View style={styles.container}>{view}</View>;
   }
 
   renderPosts() {
-    const postArray = []
+    const postArray = [];
     _.forEach(this.props.posts, (value, index) => {
-      const time = value.time
-      const timeString = moment(time).fromNow()
+      const time = value.time;
+      const timeString = moment(time).fromNow();
       postArray.push(
         <Post
-        posterName={value.name}
-        postTime={timeString}
-        postContent={value.text}
-        key={index}
+          posterName={value.name}
+          postTime={timeString}
+          postContent={value.text}
+          key={index}
         />
-      )
-    })
-    _.reverse(postArray)
-    return postArray
+      );
+    });
+    _.reverse(postArray);
+    return postArray;
   }
 }
 
@@ -156,13 +181,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 10,
     paddingBottom: 5
+  },
+  icon: {
+    width: 24,
+    height: 24
   }
-})
+});
 
 function mapStateToProps(state) {
   return {
     posts: state.posts
-  }
+  };
 }
 
-export default connect(mapStateToProps, {savePosts})(Timeline)
+export default connect(
+  mapStateToProps,
+  { savePosts }
+)(Timeline);

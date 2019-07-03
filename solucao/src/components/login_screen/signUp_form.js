@@ -2,7 +2,7 @@
  * this is the sign up form of the login screen
  */
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -13,19 +13,19 @@ import {
   Platform,
   UIManager,
   StyleSheet
-} from 'react-native'
-import { firebaseApp } from '../../firebase'
-import { getColor } from '../config'
-import * as Animatable from 'react-native-animatable'
+} from 'react-native';
+import { firebaseApp } from '../../firebase';
+import { getColor } from '../config';
+import * as Animatable from 'react-native-animatable';
 
 export default class SignUpForm extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this._handleBackBtnPress = this._handleBackBtnPress.bind(this)
+    this._handleBackBtnPress = this._handleBackBtnPress.bind(this);
 
     if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental(true)
+      UIManager.setLayoutAnimationEnabledExperimental(true);
     }
 
     this.state = {
@@ -35,146 +35,156 @@ export default class SignUpForm extends Component {
       displayName: '',
       email: '',
       password: ''
-    }
+    };
   }
 
   componentDidMount() {
-    BackHandler.addEventListener('backBtnPressed', this._handleBackBtnPress)
+    BackHandler.addEventListener('backBtnPressed', this._handleBackBtnPress);
   }
 
   componentDidUpdate() {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('backBtnPressed', this._handleBackBtnPress)
+    BackHandler.removeEventListener('backBtnPressed', this._handleBackBtnPress);
   }
 
   render() {
-    const animation = this.state.init ? 'bounceInUp' : 'bounceOutDown'
+    const animation = this.state.init ? 'bounceInUp' : 'bounceOutDown';
 
-    const errorMessage = this.state.errMsg ?
+    const errorMessage = this.state.errMsg ? (
       <Text style={styles.errMsg}>{this.state.errMsg}</Text>
-    : null
+    ) : null;
 
-    const signUpForm = this.state.signUpSuccess ?
-      null
-    :
+    const signUpForm = this.state.signUpSuccess ? null : (
       <View>
         <View style={[styles.inputContainer, { marginBottom: 10 }]}>
           <TextInput
-          style={styles.inputField}
-          value={this.state.displayName}
-          onChangeText={(text) => this.setState({ displayName: text })}
-          autoCapitalize='words'
-          autoCorrect={false}
-          underlineColorAndroid='transparent'
-          placeholder='Your Name'
-          placeholderTextColor='rgba(255,255,255,.6)'
+            style={styles.inputField}
+            value={this.state.displayName}
+            onChangeText={text => this.setState({ displayName: text })}
+            autoCapitalize="words"
+            autoCorrect={false}
+            underlineColorAndroid="transparent"
+            placeholder="Your Name"
+            placeholderTextColor="rgba(255,255,255,.6)"
           />
         </View>
         <View style={[styles.inputContainer, { marginBottom: 10 }]}>
           <TextInput
-          style={styles.inputField}
-          value={this.state.email}
-          keyboardType='email-address'
-          autoCorrect={false}
-          onChangeText={(text) => this.setState({ email: text })}
-          underlineColorAndroid='transparent'
-          placeholder='Your Email'
-          placeholderTextColor='rgba(255,255,255,.6)'
+            style={styles.inputField}
+            value={this.state.email}
+            keyboardType="email-address"
+            autoCorrect={false}
+            onChangeText={text => this.setState({ email: text })}
+            underlineColorAndroid="transparent"
+            placeholder="Your Email"
+            placeholderTextColor="rgba(255,255,255,.6)"
           />
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-          style={styles.inputField}
-          value={this.state.password}
-          onChangeText={(text) => this.setState({ password: text })}
-          underlineColorAndroid='transparent'
-          placeholder='Choose Password'
-          secureTextEntry={true}
-          placeholderTextColor='rgba(255,255,255,.6)'
+            style={styles.inputField}
+            value={this.state.password}
+            onChangeText={text => this.setState({ password: text })}
+            underlineColorAndroid="transparent"
+            placeholder="Choose Password"
+            secureTextEntry={true}
+            placeholderTextColor="rgba(255,255,255,.6)"
           />
         </View>
         <View style={styles.btnContainers}>
           <TouchableOpacity onPress={this._handleSignUp.bind(this)}>
             <View style={styles.submitBtnContainer}>
-              <Text style={styles.submitBtn}>{'Let\'s Go'.toUpperCase()}</Text>
+              <Text style={styles.submitBtn}>{"Let's Go".toUpperCase()}</Text>
             </View>
           </TouchableOpacity>
         </View>
       </View>
+    );
 
     return (
       <Animatable.View
-      animation={animation}
-      style={styles.container}
-      onAnimationEnd={this._handleAnimEnd.bind(this)}>
+        animation={animation}
+        style={styles.container}
+        onAnimationEnd={this._handleAnimEnd.bind(this)}
+      >
         <Text style={styles.title}>Sign Up</Text>
         {errorMessage}
         {signUpForm}
       </Animatable.View>
-    )
+    );
   }
 
   _handleSignUp() {
-    this.setState({errMsg: 'Signing Up...'})
-    firebaseApp.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-    .then(() => {
-      firebaseApp.auth().currentUser.updateProfile({
-        displayName: this.state.displayName
-      })
+    this.setState({ errMsg: 'Signing Up...' });
+    firebaseApp
+      .auth()
+      .createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => {
-        const uid = firebaseApp.auth().currentUser.uid
-        const name = firebaseApp.auth().currentUser.displayName
-        const email = firebaseApp.auth().currentUser.email
+        firebaseApp
+          .auth()
+          .currentUser.updateProfile({
+            displayName: this.state.displayName
+          })
+          .then(() => {
+            const uid = firebaseApp.auth().currentUser.uid;
+            const name = firebaseApp.auth().currentUser.displayName;
+            const email = firebaseApp.auth().currentUser.email;
 
-        firebaseApp.database().ref('users/' + uid).set({
-          name,
-          email,
-          uid
-        })
+            firebaseApp
+              .database()
+              .ref('users/' + uid)
+              .set({
+                name,
+                email,
+                uid
+              });
 
-        this.setState({errMsg: 'Thank you for signing up, wait for a bit to let us sign in into your account.', signUpSuccess: true})
+            this.setState({
+              errMsg:
+                'Thank you for signing up, wait for a bit to let us sign in into your account.',
+              signUpSuccess: true
+            });
 
-        setTimeout(() => {
-          if (firebaseApp.auth().currentUser) {
-            this.props.goToHomeScreen()
-            setTimeout(()=> {
-              this._handleGoBack()
-            }, 1000)
-          }
-        }, 1000)
-
+            setTimeout(() => {
+              if (firebaseApp.auth().currentUser) {
+                this.props.goToHomeScreen();
+                setTimeout(() => {
+                  this._handleGoBack();
+                }, 1000);
+              }
+            }, 1000);
+          })
+          .catch(error => {
+            this.setState({ errMsg: error.errorMessage });
+          });
       })
-      .catch((error) => {
-        this.setState({errMsg: error.errorMessage})
-      })
-    })
-    .catch((error) => {
-      this.setState({errMsg: error.message})
-    })
+      .catch(error => {
+        this.setState({ errMsg: error.message });
+      });
   }
 
   _handleGoBack() {
-    this.setState({ init: false })
+    this.setState({ init: false });
   }
 
   _handleBackBtnPress() {
-    this._handleGoBack()
-    return true
+    this._handleGoBack();
+    return true;
   }
 
   _handleAnimEnd() {
     if (!this.state.init) {
-      this.props.onBackFromSignUp()
+      this.props.onBackFromSignUp();
     }
   }
 
   _signUpSuccess() {
     this.setState({
       signUpSuccess: true
-    })
+    });
   }
 }
 
@@ -231,4 +241,4 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: getColor()
   }
-})
+});

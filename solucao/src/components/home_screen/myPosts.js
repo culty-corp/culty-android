@@ -2,7 +2,7 @@
  * my post timeline
  */
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -12,31 +12,48 @@ import {
   UIManager,
   TouchableOpacity,
   Alert,
-  StyleSheet
-} from 'react-native'
-import { connect } from 'react-redux'
-import { getColor } from '../config'
-import _ from 'lodash'
-import moment from 'moment'
-import Post from './post'
-import { firebaseApp } from '../../firebase'
+  StyleSheet,
+  Image
+} from 'react-native';
+import { connect } from 'react-redux';
+import { getColor } from '../config';
+import _ from 'lodash';
+import moment from 'moment';
+import Post from './post';
+import { firebaseApp } from '../../firebase';
 
 class MyPosts extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       posts: {},
       postsCount: 0
-    }
+    };
   }
 
-  componentDidMount() {
-    const userUid = this.props.currentUser.uid
+  static navigationOptions = {
+    drawerLabel: 'Profile',
+    drawerIcon: ({ activeTintColor }) => (
+      <Image
+        source={require('../../assets/images/leek.png')}
+        style={[styles.icon, { activeTintColor: activeTintColor }]}
+      />
+    )
+  };
 
-    firebaseApp.database().ref('/users/' + userUid + '/posts/').on('value', (snapshot) => {
-      this.setState({posts: snapshot.val(), postsCount: _.size(snapshot.val())})
-    })
+  componentDidMount() {
+    const userUid = this.props.currentUser.uid;
+
+    firebaseApp
+      .database()
+      .ref('/users/' + userUid + '/posts/')
+      .on('value', snapshot => {
+        this.setState({
+          posts: snapshot.val(),
+          postsCount: _.size(snapshot.val())
+        });
+      });
   }
 
   render() {
@@ -49,12 +66,8 @@ class MyPosts extends Component {
             </Text>
           </View>
           <View style={styles.profileCountsContainer}>
-            <Text style={styles.profileCounts}>
-              {this.state.postsCount}
-            </Text>
-            <Text style={styles.countsName}>
-              POSTS
-            </Text>
+            <Text style={styles.profileCounts}>{this.state.postsCount}</Text>
+            <Text style={styles.countsName}>POSTS</Text>
           </View>
         </View>
 
@@ -62,45 +75,47 @@ class MyPosts extends Component {
           {this.renderPosts()}
         </ScrollView>
       </View>
-    )
+    );
   }
 
   renderPosts() {
-    const postArray = []
+    const postArray = [];
     _.forEach(this.state.posts, (value, index) => {
-      const time = value.time
-      const timeString = moment(time).fromNow()
+      const time = value.time;
+      const timeString = moment(time).fromNow();
       postArray.push(
         <TouchableOpacity
-        onLongPress={this._handleDelete.bind(this, value.puid)}
-        key={index}
+          onLongPress={this._handleDelete.bind(this, value.puid)}
+          key={index}
         >
           <Post
-          posterName={value.name}
-          postTime={timeString}
-          postContent={value.text}
+            posterName={value.name}
+            postTime={timeString}
+            postContent={value.text}
           />
         </TouchableOpacity>
-      )
-    })
-    _.reverse(postArray)
-    return postArray
+      );
+    });
+    _.reverse(postArray);
+    return postArray;
   }
 
   _handleDelete(puid) {
-    Alert.alert(
-      'Delete Post',
-      'Are you sure to delete the post?',
-      [
-        {text: 'Yes', onPress: () => this._deleteConfirmed(puid) },
-        {text: 'No'}
-      ]
-    )
+    Alert.alert('Delete Post', 'Are you sure to delete the post?', [
+      { text: 'Yes', onPress: () => this._deleteConfirmed(puid) },
+      { text: 'No' }
+    ]);
   }
 
   _deleteConfirmed(puid) {
-    firebaseApp.database().ref('/posts/' + puid).remove()
-    firebaseApp.database().ref('/users/' + this.props.currentUser.uid + '/posts/' + puid).remove()
+    firebaseApp
+      .database()
+      .ref('/posts/' + puid)
+      .remove();
+    firebaseApp
+      .database()
+      .ref('/users/' + this.props.currentUser.uid + '/posts/' + puid)
+      .remove();
   }
 }
 
@@ -145,12 +160,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Bold',
     fontSize: 12,
     color: '#ffffff'
+  },
+  icon: {
+    width: 24,
+    height: 24
   }
-})
+});
 
 function mapStateToProps(state) {
   return {
     currentUser: state.currentUser
-  }
+  };
 }
-export default connect(mapStateToProps)(MyPosts)
+export default connect(mapStateToProps)(MyPosts);

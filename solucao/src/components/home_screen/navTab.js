@@ -1,48 +1,49 @@
-import React, { Component } from 'react'
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  StyleSheet
-} from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
-import { getColor } from '../config'
+import React, { Component } from 'react';
+import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { getColor } from '../config';
 
 export default class NavigationTab extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
-
     return (
       <View style={styles.tabs}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>MP</Text>
+          <Text style={styles.title}>Culty</Text>
         </View>
 
         {this.props.tabs.map((tab, i) => {
           return (
-            <TouchableOpacity key={tab} onPress={() => this.props.goToPage(i)} style={styles.tab}>
+            <TouchableOpacity
+              key={tab}
+              onPress={() => this.props.goToPage(i)}
+              style={styles.tab}
+            >
               <Icon
                 name={tab}
                 size={30}
-                color={this.props.activeTab === i ?
-                  getColor('#ffffff') : getColor('rgba(255,255,255,.4)')}
+                color={
+                  this.props.activeTab === i
+                    ? getColor('#ffffff')
+                    : getColor('rgba(255,255,255,.4)')
+                }
               />
             </TouchableOpacity>
-          )
+          );
         })}
       </View>
-    )
+    );
   }
-
 }
 
 const styles = StyleSheet.create({
   tabs: {
-    height: 50,
-    flexDirection: 'row',
+    position: 'absolute',
+    height: '100%',
+    width: '10%',
     backgroundColor: getColor('googleBlue500'),
     elevation: 5
   },
@@ -62,4 +63,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   }
-})
+});
