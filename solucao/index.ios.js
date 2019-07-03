@@ -1,18 +1,16 @@
-import React, { Component } from 'react'
-import { AppRegistry } from 'react-native'
+import React, { Component } from 'react';
+import { AppRegistry } from 'react-native';
 
-import AppStorage from './src/app_storage'
+import AppStorage from './src/app_storage';
 
 class MisterPoster extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
-    return (
-      <AppStorage />
-    )
+    return <AppStorage />;
   }
 }
 
-AppRegistry.registerComponent('MisterPoster', () => MisterPoster)
+AppRegistry.registerComponent('Culty', () => MisterPoster);

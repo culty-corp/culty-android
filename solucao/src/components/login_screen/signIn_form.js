@@ -7,7 +7,7 @@ import {
   View,
   Text,
   TextInput,
-  BackAndroid,
+  BackHandler,
   TouchableOpacity,
   LayoutAnimation,
   Platform,
@@ -40,7 +40,7 @@ class SignInForm extends Component {
   }
 
   componentDidMount() {
-    BackAndroid.addEventListener('backBtnPressed', this._handleBackBtnPress)
+    BackHandler.addEventListener('backBtnPressed', this._handleBackBtnPress)
   }
 
   componentDidUpdate() {
@@ -48,7 +48,7 @@ class SignInForm extends Component {
   }
 
   componentWillUnmount() {
-    BackAndroid.removeEventListener('backBtnPressed', this._handleBackBtnPress)
+    BackHandler.removeEventListener('backBtnPressed', this._handleBackBtnPress)
   }
 
   render() {

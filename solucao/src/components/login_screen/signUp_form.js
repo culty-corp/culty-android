@@ -7,7 +7,7 @@ import {
   View,
   Text,
   TextInput,
-  BackAndroid,
+  BackHandler,
   TouchableOpacity,
   LayoutAnimation,
   Platform,
@@ -39,7 +39,7 @@ export default class SignUpForm extends Component {
   }
 
   componentDidMount() {
-    BackAndroid.addEventListener('backBtnPressed', this._handleBackBtnPress)
+    BackHandler.addEventListener('backBtnPressed', this._handleBackBtnPress)
   }
 
   componentDidUpdate() {
@@ -47,7 +47,7 @@ export default class SignUpForm extends Component {
   }
 
   componentWillUnmount() {
-    BackAndroid.removeEventListener('backBtnPressed', this._handleBackBtnPress)
+    BackHandler.removeEventListener('backBtnPressed', this._handleBackBtnPress)
   }
 
   render() {
