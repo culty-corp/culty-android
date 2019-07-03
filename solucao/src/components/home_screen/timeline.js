@@ -90,61 +90,106 @@ class Timeline extends Component {
   }
 
   render() {
-    const notify = this.state.updateNotification ? (
-      <Text style={styles.updateNotificationStyle}>
-        {this.state.updateNotification}
-      </Text>
-    ) : null;
+    // const notify = this.state.updateNotification ? (
+    //   <Text style={styles.updateNotificationStyle}>
+    //     {this.state.updateNotification}
+    //   </Text>
+    // ) : null;
 
-    const view = this.props.posts ? (
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={this.state.isRefreshing}
-            onRefresh={this._onRefresh.bind(this)}
-            activeTintColor="#ff0000"
-            title="Loading..."
-            titleColor="#00ff00"
-            colors={[getColor()]}
-            progressBackgroundColor={getColor('#ffffff')}
-          />
-        }
-      >
-        {notify}
+    // const view = this.props.posts ? (
+    //   <ScrollView
+    //     refreshControl={
+    //       <RefreshControl
+    //         refreshing={this.state.isRefreshing}
+    //         onRefresh={this._onRefresh.bind(this)}
+    //         activeTintColor="#ff0000"
+    //         title="Loading..."
+    //         titleColor="#00ff00"
+    //         colors={[getColor()]}
+    //         progressBackgroundColor={getColor('#ffffff')}
+    //       />
+    //     }
+    //   >
+    //     {notify}
 
-        {this.renderPosts()}
-      </ScrollView>
-    ) : (
-      <View style={styles.waitView}>
-        <Text>Getting universal timeline...</Text>
-      </View>
-    );
+    //     {this.renderPosts()}
+    //   </ScrollView>
+    // ) : (
+    //   <View style={styles.waitView}>
+    //     <Text>Getting universal timeline...</Text>
+    //   </View>
+    // );
 
-    return <View style={styles.container}>{view}</View>;
+    // return <View style={styles.container}>{view}</View>;
+    return this.renderPosts();
   }
 
   renderPosts() {
-    const postArray = [];
-    _.forEach(this.props.posts, (value, index) => {
-      const time = value.time;
-      const timeString = moment(time).fromNow();
-      postArray.push(
-        <Post
-          posterName={value.name}
-          postTime={timeString}
-          postContent={value.text}
-          key={index}
-        />
-      );
-    });
-    _.reverse(postArray);
-    return postArray;
+    // const postArray = [];
+    // _.forEach(this.props.posts, (value, index) => {
+    //   const time = value.time;
+    //   const timeString = moment(time).fromNow();
+    //   postArray.push(
+    //     <Post
+    //       posterName={value.name}
+    //       postTime={timeString}
+    //       postContent={value.text}
+    //       key={index}
+    //     />
+    //   );
+    // });
+    // _.reverse(postArray);
+    // return postArray;
+    return (
+      <Post
+        style={styles.container}
+        cards={[
+          {
+            postContent: 'Tomato',
+            postTime: 'now',
+            posterName: 'Alfred',
+            postbackgroundColor: 'red'
+          },
+          {
+            postContent: 'Aubergine',
+            postTime: 'now',
+            posterName: 'Alfred',
+            backgroundColor: 'purple'
+          },
+          {
+            postContent: 'Courgette',
+            postTime: 'now',
+            posterName: 'Alfred',
+            backgroundColor: 'green'
+          },
+          {
+            postContent: 'Blueberry',
+            postTime: 'now',
+            posterName: 'Alfred',
+            backgroundColor: 'blue'
+          },
+          {
+            postContent: 'Umm...',
+            postTime: 'now',
+            posterName: 'Alfred',
+            backgroundColor: 'cyan'
+          },
+          {
+            postContent: 'orange',
+            postTime: 'now',
+            posterName: 'Alfred',
+            backgroundColor: 'orange'
+          }
+        ]}
+      />
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#b40100'
   },
   waitView: {
     flex: 1,

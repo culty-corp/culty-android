@@ -2,49 +2,90 @@
  * individual post component
  */
 
-import React, { Component } from 'react'
-import {
-  Text,
-  View,
-  StyleSheet
-} from 'react-native'
+import React, { Component } from 'react';
+import { Text, View, StyleSheet } from 'react-native';
+import SwipeCards from 'react-native-swipe-cards';
 
-import { getColor } from '../config'
+import { getColor } from '../config';
 
 export default class Posts extends Component {
   constructor(props) {
-    super(props)
+    super(props);
+    this.state = {
+      cards: this.props.cards
+    };
+  }
+
+  handleYup(card) {
+    console.log(`Yup for ${card.text}`);
+  }
+  handleNope(card) {
+    console.log(`Nope for ${card.text}`);
+  }
+  handleMaybe(card) {
+    console.log(`Maybe for ${card.text}`);
+  }
+  render() {
+    // If you want a stack of cards instead of one-per-one view, activate stack mode
+    // stack={true}
+    return (
+      <SwipeCards
+        cards={this.state.cards}
+        renderCard={cardData => <Card {...cardData} />}
+        renderNoMoreCards={() => <NoMoreCards />}
+        handleYup={this.handleYup}
+        handleNope={this.handleNope}
+        handleMaybe={this.handleMaybe}
+        hasMaybeAction
+      />
+    );
+  }
+}
+
+class Card extends React.Component {
+  constructor(props) {
+    super(props);
   }
 
   render() {
     return (
-      <View style={styles.card}>
-        <Text style={styles.name}>
-          {this.props.posterName}
-        </Text>
-        <Text style={styles.time}>
-          {this.props.postTime}
-        </Text>
-        <Text style={styles.content}>
-          {this.props.postContent}
-        </Text>
+      <View
+        style={[styles.card, { backgroundColor: this.props.backgroundColor }]}
+      >
+        <Text style={styles.name}>{this.props.posterName}</Text>
+        <Text style={styles.time}>{this.props.postTime}</Text>
+        <Text style={styles.content}>{this.props.postContent}</Text>
       </View>
-    )
+    );
+  }
+}
+
+class NoMoreCards extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <View>
+        <Text style={styles.noMoreCardsText}>No more cards</Text>
+      </View>
+    );
   }
 }
 
 const styles = StyleSheet.create({
-  card: {
-    borderWidth: 1,
-    borderColor: '#e2e2e2',
-    borderRadius: 2,
-    backgroundColor: '#ffffff',
-    padding: 10,
-    marginTop: 5,
-    marginBottom: 5,
-    marginLeft: 10,
-    marginRight: 10
-  },
+  // card: {
+  //   borderWidth: 1,
+  //   borderColor: '#e2e2e2',
+  //   borderRadius: 2,
+  //   backgroundColor: '#ffffff',
+  //   padding: 10,
+  //   marginTop: 5,
+  //   marginBottom: 5,
+  //   marginLeft: 10,
+  //   marginRight: 10
+  // },
   name: {
     color: getColor(),
     fontFamily: 'Roboto-Bold',
@@ -59,5 +100,19 @@ const styles = StyleSheet.create({
     color: 'rgba(0,0,0,.8)',
     fontFamily: 'Roboto-Regular',
     fontSize: 14
+  },
+  card: {
+    alignItems: 'center',
+    borderRadius: 5,
+    overflow: 'hidden',
+    borderColor: 'grey',
+    backgroundColor: 'white',
+    borderWidth: 1,
+    elevation: 1,
+    minWidth: '90%',
+    minHeight: '70%'
+  },
+  noMoreCardsText: {
+    fontSize: 22
   }
-})
+});
