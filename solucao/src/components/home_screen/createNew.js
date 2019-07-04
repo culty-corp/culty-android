@@ -14,22 +14,50 @@ import {
   UIManager,
   Image
 } from 'react-native';
-import { getColor } from '../config';
-import { firebaseApp } from '../../firebase';
+import { Container, Content, Form, Item, Input, Label, Textarea } from 'native-base';
 import { cinzaClaro, cinzaEscuro, corTexto, laranjaEscuro } from '../../style';
+import { getColor } from '../config';
+import * as Maps from '../Maps'
+import { firebaseApp } from '../../firebase';
+import { connect } from 'react-redux';
 
-export default class CreateNew extends Component {
+export class CreateNew extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      postStatus: null,
-      postText: ''
-    };
 
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
+  }
+
+  state = {
+    titulo: '',
+    conteudoTexto: '',
+    resumo: '',
+  }
+
+  submit = () => {
+
+    const { titulo, resumo, conteudoTexto } = this.state;
+
+    const post = {
+      usuario: { id: "5ccda98baacad326400e9195", nome: "saulocalixto", },
+      titulo,
+      tipoMidia: 'Texto',
+      resumo,
+      conteudoTexto,
+      filtros : ["mpb", "rock"]
+  };
+
+  this.props.adicionarPost(post).then(() => {
+    this.props.getAllObras()
+})
+
+    this.setState({ titulo: '', resumo: '', conteudoTexto: '' });
+  }
+
+  toHome = () => {
+    // this.props.navigation.dispatch(NavigationActions.back())
   }
 
   static navigationOptions = {
@@ -37,7 +65,6 @@ export default class CreateNew extends Component {
     drawerIcon: ({ activeTintColor }) => (
       <Image
         source={require('../../assets/images/leek.png')}
-        style={[styles.icon, { activeTintColor: activeTintColor }]}
       />
     )
   };
@@ -49,73 +76,104 @@ export default class CreateNew extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{'Create a new Post'.toUpperCase()}</Text>
-        <Text style={styles.message}>{this.state.postStatus}</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            multiline={true}
-            style={styles.inputField}
-            underlineColorAndroid="transparent"
-            placeholder="Your post..."
-            value={this.state.postText}
-            onChangeText={text => this.setState({ postText: text })}
-            placeholderTextColor={corTexto}
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.btnContainer}
-          onPress={this._handleNewPost.bind(this)}
-        >
-          <Text style={styles.btnText}>POST</Text>
-        </TouchableOpacity>
+        <Text style={styles.title}>{'Nova postagem'.toUpperCase()}</Text>
+        <Text style={styles.message}>Crie um novo post</Text>
+        <Container style={{ padding: 10, backgroundColor: 'white' }}>
+        <Content>
+          <Form>
+          <Item floatingLabel>
+              <Label>Titulo</Label>
+              <Input
+              value={this.state.titulo}
+                onChangeText={(titulo) => { this.setState({ titulo }); }} />
+            </Item>
+            <Item floatingLabel>
+              <Label>Resumo</Label>
+              <Input
+                value={this.state.resumo} onChangeText={(resumo) => { this.setState({ resumo }); }}/>
+            </Item>
+            <Textarea 
+              value={this.state.conteudo} onChangeText={(conteudoTexto) => { this.setState({ conteudoTexto }); }} 
+              rowSpan={5} 
+              bordered 
+              placeholder="Conteúdo" />
+          </Form>
+          <View
+            style={styleButton.containerBtn}>
+            <TouchableOpacity
+              onPress={() => this.submit()}
+              style={ true ? 
+                styleButton.styleBtnAtive : 
+                styleButton.styleBtnInative }
+              disabled={!true}>
+              <Text style={ true ? 
+                styleButton.btnTextAtive : 
+                styleButton.btnTextInative }>Postar</Text>
+            </TouchableOpacity>
+          </View>
+        </Content>
+      </Container>
+
       </View>
     );
   }
 
   _handleNewPost() {
-    this.setState({
-      postStatus: 'Posting...'
-    });
+    // this.setState({
+    //   postStatus: 'Posting...'
+    // });
 
-    if (this.state.postText.length > 20) {
-      const time = Date.now();
-      const uid = firebaseApp.auth().currentUser.uid;
-      const email = firebaseApp.auth().currentUser.email;
-      const newPostKey = firebaseApp
-        .database()
-        .ref()
-        .child('posts')
-        .push().key;
+    // if (this.state.postText.length > 20) {
+    //   const time = Date.now();
+    //   const uid = firebaseApp.auth().currentUser.uid;
+    //   const email = firebaseApp.auth().currentUser.email;
+    //   const newPostKey = firebaseApp
+    //     .database()
+    //     .ref()
+    //     .child('posts')
+    //     .push().key;
 
-      const postData = {
-        name: firebaseApp.auth().currentUser.displayName,
-        time: time,
-        text: this.state.postText,
-        puid: newPostKey
-      };
-      let updates = {};
-      updates['/posts/' + newPostKey] = postData;
-      updates['/users/' + uid + '/posts/' + newPostKey] = postData;
+    //   const postData = {
+    //     name: firebaseApp.auth().currentUser.displayName,
+    //     time: time,
+    //     text: this.state.postText,
+    //     puid: newPostKey
+    //   };
+    //   let updates = {};
+    //   updates['/posts/' + newPostKey] = postData;
+    //   updates['/users/' + uid + '/posts/' + newPostKey] = postData;
 
-      firebaseApp
-        .database()
-        .ref()
-        .update(updates)
-        .then(() => {
-          this.setState({ postStatus: 'Posted! Thank You.', postText: '' });
-        })
-        .catch(() => {
-          this.setState({ postStatus: 'Something went wrong!!!' });
-        });
-    } else {
-      this.setState({ postStatus: 'You need to post at least 20 charecters.' });
-    }
+    //   firebaseApp
+    //     .database()
+    //     .ref()
+    //     .update(updates)
+    //     .then(() => {
+    //       this.setState({ postStatus: 'Posted! Thank You.', postText: '' });
+    //     })
+    //     .catch(() => {
+    //       this.setState({ postStatus: 'Something went wrong!!!' });
+    //     });
+    // } else {
+    //   this.setState({ postStatus: 'You need to post at least 20 charecters.' });
+    // }
 
-    setTimeout(() => {
-      this.setState({ postStatus: null });
-    }, 2000);
+    // setTimeout(() => {
+    //   this.setState({ postStatus: null });
+    // }, 2000);
   }
 }
+
+function mapStateToProps(state) {
+  const postagens = state.postsCulty.postagens
+  return {
+    postagens
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  Maps.mapDispatchToProps
+)(CreateNew);
 
 const styles = StyleSheet.create({
   container: {
@@ -168,3 +226,52 @@ const styles = StyleSheet.create({
     height: 24
   }
 });
+
+const cores = {
+  titulo: '#54504E',
+  subTitulo: '#9BADAD',
+  botaoAtivo: '#ff6600',
+  botaoInativo: '#D4CEC9',
+  textoBotao: '#8A8685'
+};
+
+const styleButton = StyleSheet.create({
+  containerBtn: {
+    flexDirection: "row",
+    marginBottom: 20,
+    justifyContent: 'space-between',
+    padding: 15,
+  },
+  styleBtnAtive: {
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 15,
+    paddingBottom: 15,
+    backgroundColor: 'transparent',
+    borderColor: cores.botaoAtivo,
+    borderStyle: 'solid',
+    borderWidth: 2,
+    borderRadius: 5,
+    justifyContent: 'center',
+  },
+  btnTextAtive: {
+    color: cores.textoBotao,
+    fontWeight: 'bold',
+  },
+  styleBtnInative: {
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 15,
+    paddingBottom: 15,
+    backgroundColor: 'transparent',
+    borderColor: cores.botaoInativo,
+    borderStyle: 'solid',
+    borderWidth: 2,
+    borderRadius: 5,
+    justifyContent: 'center',
+  },
+  btnTextInative: {
+    color: cores.textoBotao,
+    fontWeight: 'bold'
+  },
+})
