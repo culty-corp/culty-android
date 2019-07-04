@@ -5,16 +5,23 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import SwipeCards from 'react-native-swipe-cards';
-
+import * as Maps from '../Maps'
+import { connect } from "react-redux";
 import { getColor } from '../config';
 
-export default class Posts extends Component {
+
+class Posts extends Component {
   constructor(props) {
     super(props);
     this.state = {
       cards: this.props.cards
-    };
   }
+
+  
+}
+      componentDidMount = () => {
+
+      }
 
   handleYup(card) {
     console.log(`Yup for ${card.text}`);
@@ -30,7 +37,7 @@ export default class Posts extends Component {
     // stack={true}
     return (
       <SwipeCards
-        cards={this.state.cards}
+        cards={this.props.cards}
         renderCard={cardData => <Card {...cardData} />}
         renderNoMoreCards={() => <NoMoreCards />}
         handleYup={this.handleYup}
@@ -42,6 +49,15 @@ export default class Posts extends Component {
   }
 }
 
+function mapStateToProps(store) {
+  const posts = store.postsCulty
+  return {
+    ...posts
+  }
+}
+
+export default connect(mapStateToProps, Maps.mapDispatchToProps)(Posts)
+
 class Card extends React.Component {
   constructor(props) {
     super(props);
@@ -52,9 +68,10 @@ class Card extends React.Component {
       <View
         style={[styles.card, { backgroundColor: this.props.backgroundColor }]}
       >
-        <Text style={styles.name}>{this.props.posterName}</Text>
-        <Text style={styles.time}>{this.props.postTime}</Text>
-        <Text style={styles.content}>{this.props.postContent}</Text>
+        <Text style={styles.name}>{this.props.usuario.nome}</Text>
+        <Text style={styles.time}>{this.props.tipo}</Text>
+        <Text style={styles.content}>{this.props.titulo}</Text>
+        <Text style={styles.content}>{this.props.conteudoTexto}</Text>
       </View>
     );
   }

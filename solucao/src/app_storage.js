@@ -8,6 +8,8 @@ import React, { Component } from 'react'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import * as storage from 'redux-storage'
+import thunk from 'redux-thunk';
+import reducer from './reducers/index'
 
 // import the main application component
 import App from './app'
@@ -23,7 +25,7 @@ const engine = createEngine('mister-poster-application-engine')
 
 // apply middlewares and create the store with application storage
 const middleware = storage.createMiddleware(engine)
-const createStoreWithMiddleware = applyMiddleware(middleware)(createStore)
+const createStoreWithMiddleware = applyMiddleware(middleware, thunk)(createStore)
 const store = createStoreWithMiddleware(appStorage)
 
 // create loader to load app storage from device
@@ -32,9 +34,6 @@ load(store)
 
 
 export default class AppStorage extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   render() {
     return (

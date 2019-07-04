@@ -14,6 +14,7 @@ import {
   RefreshControl,
   Image
 } from 'react-native';
+import * as Maps from '../Maps'
 import _ from 'lodash';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -47,6 +48,11 @@ class Timeline extends Component {
   };
 
   componentDidMount() {
+
+    if(this.props.postagens.length === 0) {
+      this.props.getAllObras()
+    }
+
     firebaseApp
       .database()
       .ref('posts/')
@@ -143,44 +149,7 @@ class Timeline extends Component {
     return (
       <Post
         style={styles.container}
-        cards={[
-          {
-            postContent: 'Tomato',
-            postTime: 'now',
-            posterName: 'Alfred',
-            postbackgroundColor: 'red'
-          },
-          {
-            postContent: 'Aubergine',
-            postTime: 'now',
-            posterName: 'Alfred',
-            backgroundColor: 'purple'
-          },
-          {
-            postContent: 'Courgette',
-            postTime: 'now',
-            posterName: 'Alfred',
-            backgroundColor: 'green'
-          },
-          {
-            postContent: 'Blueberry',
-            postTime: 'now',
-            posterName: 'Alfred',
-            backgroundColor: 'blue'
-          },
-          {
-            postContent: 'Umm...',
-            postTime: 'now',
-            posterName: 'Alfred',
-            backgroundColor: 'cyan'
-          },
-          {
-            postContent: 'orange',
-            postTime: 'now',
-            posterName: 'Alfred',
-            backgroundColor: 'orange'
-          }
-        ]}
+        cards={this.props.postagens}
       />
     );
   }
@@ -234,12 +203,14 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
+  const postagens = state.postsCulty.postagens
   return {
-    posts: state.posts
+    posts: state.posts,
+    postagens
   };
 }
 
 export default connect(
   mapStateToProps,
-  { savePosts }
+  Maps.mapDispatchToProps
 )(Timeline);
