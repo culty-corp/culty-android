@@ -45,14 +45,12 @@ const AppNavigator = createDrawerNavigator(
   },
   {
     // define customComponent here
+    initialRouteName: 'Timeline',
     contentComponent: DrawerContent,
     contentOptions: {
       activeTintColor: laranjaEscuro,
       inactiveTintColor: corTexto
     }
-  },
-  {
-    initialRouteName: 'Timeline'
   }
 );
 const AppContainer = createAppContainer(AppNavigator);
