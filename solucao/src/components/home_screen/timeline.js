@@ -14,7 +14,7 @@ import {
   RefreshControl,
   Image
 } from 'react-native';
-import * as Maps from '../Maps'
+import * as Maps from '../Maps';
 import _ from 'lodash';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -49,9 +49,8 @@ class Timeline extends Component {
   };
 
   componentDidMount() {
-
-    if(this.props.postagens.length === 0) {
-      this.props.getAllObras()
+    if (this.props.postagens.length === 0) {
+      this.props.getAllObras();
     }
 
     firebaseApp
@@ -147,12 +146,7 @@ class Timeline extends Component {
     // });
     // _.reverse(postArray);
     // return postArray;
-    return (
-      <Post
-        style={styles.container}
-        cards={this.props.postagens}
-      />
-    );
+    return <Post style={styles.container} cards={this.props.postagens} />;
   }
 }
 
@@ -203,7 +197,7 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
-  const postagens = state.postsCulty.postagens
+  const postagens = state.postsCulty.postagens;
   return {
     posts: state.posts,
     postagens

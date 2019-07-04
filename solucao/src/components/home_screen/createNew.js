@@ -65,6 +65,7 @@ export class CreateNew extends Component {
     drawerIcon: ({ activeTintColor }) => (
       <Image
         source={require('../../assets/images/leek.png')}
+        style={[styles.icon, { activeTintColor: activeTintColor }]}
       />
     )
   };

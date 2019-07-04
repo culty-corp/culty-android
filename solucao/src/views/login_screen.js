@@ -170,7 +170,8 @@ class LoginScreen extends Component {
     const name = currentUser.displayName;
     const uid = currentUser.uid;
     this.props.signedIn(email, name, uid);
-    this.props.navigator.push({ view: HomeScreen });
+
+    this.props.navigation.navigate('Timeline');
   }
 }
 

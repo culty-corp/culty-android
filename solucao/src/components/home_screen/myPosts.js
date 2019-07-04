@@ -44,6 +44,10 @@ class MyPosts extends Component {
   };
 
   componentDidMount() {
+    if (this.props.postagens.length === 0) {
+      this.props.getAllObras();
+    }
+
     const userUid = this.props.currentUser.uid;
 
     firebaseApp
@@ -115,49 +119,7 @@ class MyPosts extends Component {
     // });
     // _.reverse(postArray);
     // return postArray;
-    return (
-      <Post
-        style={styles.container}
-        cards={[
-          {
-            postContent: 'Tomato',
-            postTime: 'now',
-            posterName: 'Alfred',
-            postbackgroundColor: 'red'
-          },
-          {
-            postContent: 'Aubergine',
-            postTime: 'now',
-            posterName: 'Alfred',
-            backgroundColor: 'purple'
-          },
-          {
-            postContent: 'Courgette',
-            postTime: 'now',
-            posterName: 'Alfred',
-            backgroundColor: 'green'
-          },
-          {
-            postContent: 'Blueberry',
-            postTime: 'now',
-            posterName: 'Alfred',
-            backgroundColor: 'blue'
-          },
-          {
-            postContent: 'Umm...',
-            postTime: 'now',
-            posterName: 'Alfred',
-            backgroundColor: 'cyan'
-          },
-          {
-            postContent: 'orange',
-            postTime: 'now',
-            posterName: 'Alfred',
-            backgroundColor: 'orange'
-          }
-        ]}
-      />
-    );
+    return <Post style={styles.container} cards={this.props.postagens} />;
   }
 
   _handleDelete(puid) {
@@ -228,8 +190,12 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
+  const postagens = state.postsCulty.postagens;
+
   return {
-    currentUser: state.currentUser
+    currentUser: state.currentUser,
+    posts: state.posts,
+    postagens
   };
 }
 export default connect(mapStateToProps)(MyPosts);
