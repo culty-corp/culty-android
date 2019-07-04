@@ -26,6 +26,7 @@ import InitialView from '../components/login_screen/initial_view';
 import SignInForm from '../components/login_screen/signIn_form';
 import SignUpForm from '../components/login_screen/signUp_form';
 import ForgotPassForm from '../components/login_screen/forgotPassword_form';
+import { laranjaEscuro } from '../style';
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -96,10 +97,7 @@ class LoginScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <StatusBar
-          backgroundColor={getColor('googleBlue700')}
-          animated={true}
-        />
+        <StatusBar backgroundColor={laranjaEscuro} animated={true} />
 
         <Background
           imgSrouce={require('../assets/images/cat-image-home-screen.jpg')}

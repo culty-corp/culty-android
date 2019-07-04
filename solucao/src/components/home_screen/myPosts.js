@@ -21,6 +21,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import Post from './post';
 import { firebaseApp } from '../../firebase';
+import { laranjaEscuro, corTexto } from '../../style';
 
 class MyPosts extends Component {
   constructor(props) {
@@ -79,25 +80,84 @@ class MyPosts extends Component {
   }
 
   renderPosts() {
-    const postArray = [];
-    _.forEach(this.state.posts, (value, index) => {
-      const time = value.time;
-      const timeString = moment(time).fromNow();
-      postArray.push(
-        <TouchableOpacity
-          onLongPress={this._handleDelete.bind(this, value.puid)}
-          key={index}
-        >
-          <Post
-            posterName={value.name}
-            postTime={timeString}
-            postContent={value.text}
-          />
-        </TouchableOpacity>
-      );
-    });
-    _.reverse(postArray);
-    return postArray;
+    // const postArray = [];
+    // _.forEach(this.state.posts, (value, index) => {
+    //   const time = value.time;
+    //   const timeString = moment(time).fromNow();
+    //   postArray.push(
+    //     <TouchableOpacity
+    //       onLongPress={this._handleDelete.bind(this, value.puid)}
+    //       key={index}
+    //     >
+    //       <Post
+    //         posterName={value.name}
+    //         postTime={timeString}
+    //         postContent={value.text}
+    //       />
+    //     </TouchableOpacity>
+    //   );
+    // });
+    // _.reverse(postArray);
+    // return postArray;
+
+    // const postArray = [];
+    // _.forEach(this.props.posts, (value, index) => {
+    //   const time = value.time;
+    //   const timeString = moment(time).fromNow();
+    //   postArray.push(
+    //     <Post
+    //       posterName={value.name}
+    //       postTime={timeString}
+    //       postContent={value.text}
+    //       key={index}
+    //     />
+    //   );
+    // });
+    // _.reverse(postArray);
+    // return postArray;
+    return (
+      <Post
+        style={styles.container}
+        cards={[
+          {
+            postContent: 'Tomato',
+            postTime: 'now',
+            posterName: 'Alfred',
+            postbackgroundColor: 'red'
+          },
+          {
+            postContent: 'Aubergine',
+            postTime: 'now',
+            posterName: 'Alfred',
+            backgroundColor: 'purple'
+          },
+          {
+            postContent: 'Courgette',
+            postTime: 'now',
+            posterName: 'Alfred',
+            backgroundColor: 'green'
+          },
+          {
+            postContent: 'Blueberry',
+            postTime: 'now',
+            posterName: 'Alfred',
+            backgroundColor: 'blue'
+          },
+          {
+            postContent: 'Umm...',
+            postTime: 'now',
+            posterName: 'Alfred',
+            backgroundColor: 'cyan'
+          },
+          {
+            postContent: 'orange',
+            postTime: 'now',
+            posterName: 'Alfred',
+            backgroundColor: 'orange'
+          }
+        ]}
+      />
+    );
   }
 
   _handleDelete(puid) {
@@ -131,7 +191,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     borderRadius: 2,
-    backgroundColor: getColor()
+    backgroundColor: laranjaEscuro
   },
   profileNameContainer: {
     flex: 3,
@@ -142,7 +202,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     fontFamily: 'Roboto-Bold',
     fontSize: 20,
-    color: '#ffffff',
+    color: corTexto,
     fontFamily: 'MagmaWave'
   },
   profileCountsContainer: {
@@ -154,12 +214,12 @@ const styles = StyleSheet.create({
   profileCounts: {
     fontFamily: 'Roboto-Regular',
     fontSize: 30,
-    color: '#ffffff'
+    color: corTexto
   },
   countsName: {
     fontFamily: 'Roboto-Bold',
     fontSize: 12,
-    color: '#ffffff'
+    color: corTexto
   },
   icon: {
     width: 24,

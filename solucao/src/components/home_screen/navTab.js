@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getColor } from '../config';
+import { laranjaEscuro, corTexto } from '../../style';
 
 export default class NavigationTab extends Component {
   constructor(props) {
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     height: '100%',
     width: '10%',
-    backgroundColor: getColor('googleBlue500'),
+    backgroundColor: laranjaEscuro,
     elevation: 5
   },
   titleContainer: {
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'MagmaWave',
     fontSize: 30,
-    color: '#ffffff'
+    color: corTexto
   },
   tab: {
     flex: 2,

@@ -21,6 +21,7 @@ import { savePosts } from '../../actions';
 import { getColor } from '../config';
 import { firebaseApp } from '../../firebase';
 import Post from './post';
+import { cinzaClaro, corTexto } from '../../style';
 
 class Timeline extends Component {
   constructor(props) {
@@ -188,8 +189,7 @@ class Timeline extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#b40100'
+    flex: 1
   },
   waitView: {
     flex: 1,
@@ -198,9 +198,9 @@ const styles = StyleSheet.create({
   },
   card: {
     borderWidth: 1,
-    borderColor: '#e2e2e2',
+    borderColor: cinzaClaro,
     borderRadius: 2,
-    backgroundColor: '#ffffff',
+    backgroundColor: cinzaClaro,
     padding: 10,
     marginTop: 5,
     marginBottom: 5,
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   name: {
-    color: getColor(),
+    color: corTexto,
     fontFamily: 'Roboto-Bold',
     fontSize: 15
   },
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   content: {
-    color: 'rgba(0,0,0,.8)',
+    color: corTexto,
     fontFamily: 'Roboto-Regular',
     fontSize: 14
   },

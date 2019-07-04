@@ -2,7 +2,7 @@
  * this is the forgot password form of the login screen
  */
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -13,95 +13,103 @@ import {
   Platform,
   UIManager,
   StyleSheet
-} from 'react-native'
-import { getColor } from '../config'
-import * as Animatable from 'react-native-animatable'
-import { firebaseApp } from '../../firebase'
+} from 'react-native';
+import { getColor } from '../config';
+import * as Animatable from 'react-native-animatable';
+import { firebaseApp } from '../../firebase';
+import { corTexto, cinzaClaro, laranjaEscuro } from '../../style';
 
 export default class ForgotPassForm extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this._handleBackBtnPress = this._handleBackBtnPress.bind(this)
+    this._handleBackBtnPress = this._handleBackBtnPress.bind(this);
 
     if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental(true)
+      UIManager.setLayoutAnimationEnabledExperimental(true);
     }
 
     this.state = {
       init: true,
       errMsg: null,
       email: ''
-    }
+    };
   }
 
   componentDidMount() {
-    BackHandler.addEventListener('backBtnPressed', this._handleBackBtnPress)
+    BackHandler.addEventListener('backBtnPressed', this._handleBackBtnPress);
   }
 
   componentDidUpdate() {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('backBtnPressed', this._handleBackBtnPress)
+    BackHandler.removeEventListener('backBtnPressed', this._handleBackBtnPress);
   }
 
   render() {
-    const animation = this.state.init ? 'bounceInUp' : 'bounceOutDown'
-    const errorMessage = this.state.errMsg ?
+    const animation = this.state.init ? 'bounceInUp' : 'bounceOutDown';
+    const errorMessage = this.state.errMsg ? (
       <Text style={styles.errMsg}>{this.state.errMsg}</Text>
-    : null
+    ) : null;
 
     return (
       <Animatable.View
-      animation={animation}
-      style={styles.container}
-      onAnimationEnd={this._handleAnimEnd.bind(this)}>
+        animation={animation}
+        style={styles.container}
+        onAnimationEnd={this._handleAnimEnd.bind(this)}
+      >
         <Text style={styles.title}>Forgot Password</Text>
         {errorMessage}
         <View style={[styles.inputContainer, { marginBottom: 10 }]}>
           <TextInput
-          style={styles.inputField}
-          underlineColorAndroid='transparent'
-          placeholder='Enter Your Email'
-          placeholderTextColor='rgba(255,255,255,.6)'
-          onChangeText={(text) => this.setState({ email: text })}
+            style={styles.inputField}
+            underlineColorAndroid="transparent"
+            placeholder="Enter Your Email"
+            placeholderTextColor={corTexto}
+            onChangeText={text => this.setState({ email: text })}
           />
         </View>
         <View style={styles.btnContainers}>
           <TouchableOpacity onPress={this._handleForgotPass.bind(this)}>
             <View style={styles.submitBtnContainer}>
-              <Text style={styles.submitBtn}>{'Recover My Password'.toUpperCase()}</Text>
+              <Text style={styles.submitBtn}>
+                {'Recover My Password'.toUpperCase()}
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
       </Animatable.View>
-    )
+    );
   }
 
   _handleForgotPass() {
-    this.setState({errMsg: 'Please Wait...'})
+    this.setState({ errMsg: 'Please Wait...' });
 
-    firebaseApp.auth().sendPasswordResetEmail(this.state.email).then(()=> {
-      this.setState({errMsg: 'An email has been sent!'})
-    }).catch((error) => {
-      this.setState({errMsg: error.message})
-    })
+    firebaseApp
+      .auth()
+      .sendPasswordResetEmail(this.state.email)
+      .then(() => {
+        this.setState({ errMsg: 'An email has been sent!' });
+      })
+      .catch(error => {
+        this.setState({ errMsg: error.message });
+      });
   }
 
   _handleGoBack() {
-    this.setState({ init: false })
+    this.setState({ init: false });
   }
 
   _handleBackBtnPress() {
-    this._handleGoBack()
-    return true
+    this._handleGoBack();
+    return true;
   }
 
   _handleAnimEnd() {
     if (!this.state.init) {
-      this.props.onBackFromForgotPass()
+      this.props.onBackFromForgotPass();
     }
   }
 }
@@ -117,7 +125,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'MagmaWave',
     marginBottom: 10,
-    color: 'rgba(255,255,255,.8)'
+    color: corTexto
   },
   errMsg: {
     color: '#ffffff',
@@ -126,7 +134,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   inputContainer: {
-    backgroundColor: 'rgba(255,255,255,.3)',
+    backgroundColor: cinzaClaro,
     borderRadius: 5
   },
   inputField: {
@@ -135,7 +143,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
     fontFamily: 'Roboto-Bold',
-    color: '#ffffff'
+    color: corTexto
   },
   btnContainers: {
     marginTop: 0,
@@ -146,7 +154,7 @@ const styles = StyleSheet.create({
   submitBtnContainer: {
     width: 240,
     height: 40,
-    backgroundColor: '#ffffff',
+    backgroundColor: laranjaEscuro,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center'
@@ -154,6 +162,6 @@ const styles = StyleSheet.create({
   submitBtn: {
     fontFamily: 'Roboto-Bold',
     fontSize: 12,
-    color: getColor()
+    color: corTexto
   }
-})
+});

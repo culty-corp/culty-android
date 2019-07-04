@@ -7,6 +7,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import SwipeCards from 'react-native-swipe-cards';
 
 import { getColor } from '../config';
+import { corTexto, cinzaClaro } from '../../style';
 
 export default class Posts extends Component {
   constructor(props) {
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
   //   marginRight: 10
   // },
   name: {
-    color: getColor(),
+    color: corTexto,
     fontFamily: 'Roboto-Bold',
     fontSize: 15
   },
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   content: {
-    color: 'rgba(0,0,0,.8)',
+    color: corTexto,
     fontFamily: 'Roboto-Regular',
     fontSize: 14
   },
@@ -105,8 +106,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     overflow: 'hidden',
-    borderColor: 'grey',
-    backgroundColor: 'white',
+    borderColor: cinzaClaro,
+    backgroundColor: cinzaClaro,
     borderWidth: 1,
     elevation: 1,
     minWidth: '90%',

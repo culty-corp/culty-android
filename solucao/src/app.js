@@ -22,7 +22,7 @@ import HomeScreen from './views/home_screen';
 import Routes from './routes';
 
 // import firebase to determine which view to display
-import { firebaseApp } from './firebase';
+import { cinzaEscuro, corTexto, laranja } from './style';
 
 class App extends Component {
   constructor(props) {
@@ -66,7 +66,7 @@ class App extends Component {
     //   );
     // }
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: cinzaEscuro, color: laranja }}>
         <Routes />
       </View>
     );

@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { firebaseApp } from '../../firebase';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { corTexto } from '../../style';
 
 export default class Settings extends Component {
   constructor(props) {
@@ -59,7 +60,7 @@ export default class Settings extends Component {
           <Icon
             name="md-log-out"
             size={30}
-            color="rgba(0,0,0,.5)"
+            color={corTexto}
             style={styles.itemIcon}
           />
           <Text style={styles.itemName}>
@@ -73,7 +74,7 @@ export default class Settings extends Component {
           <Icon
             name="md-close"
             size={30}
-            color="rgba(0,0,0,.5)"
+            color={corTexto}
             style={styles.itemIcon}
           />
           <Text style={[styles.itemName, { color: 'red' }]}>
@@ -145,7 +146,8 @@ const styles = StyleSheet.create({
     marginRight: 20
   },
   itemName: {
-    fontFamily: 'Roboto-Regular'
+    fontFamily: 'Roboto-Regular',
+    color: corTexto
   },
   icon: {
     width: 24,

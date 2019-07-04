@@ -3,17 +3,14 @@
  * and the shadow (shadow doesn't work on android < 5.0)
  */
 
-import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  StyleSheet
-} from 'react-native'
-import { getColor } from '../config'
+import React, { Component } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { getColor } from '../config';
+import { laranjaEscuro, corTexto } from '../../style';
 
 export default class LogoCircle extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
@@ -21,25 +18,25 @@ export default class LogoCircle extends Component {
       <View style={styles.logoContainer}>
         <Text style={styles.logoText}>MP</Text>
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
-  logoContainer : {
+  logoContainer: {
     height: 180,
     width: 180,
-    backgroundColor: '#ffffff',
+    backgroundColor: laranjaEscuro,
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 20
   },
-  logoText : {
+  logoText: {
     fontSize: 80,
     fontFamily: 'MagmaWave',
-    color: getColor(),
+    color: corTexto,
     marginTop: 5,
     marginLeft: 5
   }
-})
+});

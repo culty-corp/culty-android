@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import { getColor } from '../config';
 import { firebaseApp } from '../../firebase';
+import { cinzaClaro, cinzaEscuro, corTexto, laranjaEscuro } from '../../style';
 
 export default class CreateNew extends Component {
   constructor(props) {
@@ -58,7 +59,7 @@ export default class CreateNew extends Component {
             placeholder="Your post..."
             value={this.state.postText}
             onChangeText={text => this.setState({ postText: text })}
-            placeholderTextColor="rgba(0,0,0,.6)"
+            placeholderTextColor={corTexto}
           />
         </View>
         <TouchableOpacity
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     fontFamily: 'Roboto-Bold',
     fontSize: 15,
-    color: getColor()
+    color: corTexto
   },
   message: {
     textAlign: 'left',
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flex: 1,
     justifyContent: 'flex-start',
-    backgroundColor: 'rgba(255,255,255,.6)',
+    backgroundColor: cinzaClaro,
     marginBottom: 10,
     padding: 5,
     borderWidth: 1,
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
   btnContainer: {
     width: 120,
     height: 40,
-    backgroundColor: getColor(),
+    backgroundColor: laranjaEscuro,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
   btnText: {
     fontFamily: 'Roboto-Bold',
     fontSize: 12,
-    color: getColor('#ffffff')
+    color: corTexto
   },
   icon: {
     width: 24,

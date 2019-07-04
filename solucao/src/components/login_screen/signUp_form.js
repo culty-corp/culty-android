@@ -17,6 +17,7 @@ import {
 import { firebaseApp } from '../../firebase';
 import { getColor } from '../config';
 import * as Animatable from 'react-native-animatable';
+import { corTexto, cinzaClaro, laranjaEscuro } from '../../style';
 
 export default class SignUpForm extends Component {
   constructor(props) {
@@ -68,7 +69,7 @@ export default class SignUpForm extends Component {
             autoCorrect={false}
             underlineColorAndroid="transparent"
             placeholder="Your Name"
-            placeholderTextColor="rgba(255,255,255,.6)"
+            placeholderTextColor={corTexto}
           />
         </View>
         <View style={[styles.inputContainer, { marginBottom: 10 }]}>
@@ -80,7 +81,7 @@ export default class SignUpForm extends Component {
             onChangeText={text => this.setState({ email: text })}
             underlineColorAndroid="transparent"
             placeholder="Your Email"
-            placeholderTextColor="rgba(255,255,255,.6)"
+            placeholderTextColor={corTexto}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -91,7 +92,7 @@ export default class SignUpForm extends Component {
             underlineColorAndroid="transparent"
             placeholder="Choose Password"
             secureTextEntry={true}
-            placeholderTextColor="rgba(255,255,255,.6)"
+            placeholderTextColor={corTexto}
           />
         </View>
         <View style={styles.btnContainers}>
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontFamily: 'MagmaWave',
     marginBottom: 10,
-    color: 'rgba(255,255,255,.8)'
+    color: corTexto
   },
   errMsg: {
     color: '#ffffff',
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular'
   },
   inputContainer: {
-    backgroundColor: 'rgba(255,255,255,.3)',
+    backgroundColor: cinzaClaro,
     borderRadius: 5
   },
   inputField: {
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
     fontFamily: 'Roboto-Bold',
-    color: '#ffffff'
+    color: corTexto
   },
   btnContainers: {
     marginTop: 15,
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
   submitBtnContainer: {
     width: 120,
     height: 40,
-    backgroundColor: '#ffffff',
+    backgroundColor: laranjaEscuro,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center'
@@ -239,6 +240,6 @@ const styles = StyleSheet.create({
   submitBtn: {
     fontFamily: 'Roboto-Bold',
     fontSize: 12,
-    color: getColor()
+    color: corTexto
   }
 });

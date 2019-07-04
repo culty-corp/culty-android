@@ -26,6 +26,7 @@ import Timeline from '../components/home_screen/timeline';
 import CreateNew from '../components/home_screen/createNew';
 import MyPosts from '../components/home_screen/myPosts';
 import Settings from '../components/home_screen/settings';
+import { laranjaEscuro } from '../style';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -45,10 +46,7 @@ class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar
-          backgroundColor={getColor('googleBlue700')}
-          animated={true}
-        />
+        <StatusBar backgroundColor={laranjaEscuro} animated={true} />
         <ScrollableTabView
           initialPage={0}
           // renderTabBar={() => <NavigationTab />}
@@ -83,8 +81,7 @@ class HomeScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#ffffff'
+    flex: 1
   },
   icon: {
     width: 24,
