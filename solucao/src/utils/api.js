@@ -126,14 +126,32 @@ export const deleteObra = id =>
     .then(res => res.json())
     .then(data => data);
 
-export const createObra = obra =>
-  fetch(`${api}/obras`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(obra)
-  })
-    .then(res => res.json())
-    .then(data => data);
+export const createObra = obra => {
+  // return new Promise(function(resolve, reject) {
+  //   firebaseApp
+  //     .database()
+  //     .ref('posts/')
+  //     .once('value')
+  //     .then(snapshot => {
+  //       // this.setState({posts: snapshot.val()})
+  //       savePosts(snapshot.val());
+  //       console.log(snapshot.val());
+  //       resolve(snapshot.val());
+  //     })
+  //     .then(data => data)
+  //     .catch(err => {
+  //       console.log(err);
+  //       reject(err);
+  //     });
+  // });
+  // fetch(`${api}/obras`, {
+  //   method: 'POST',
+  //   headers,
+  //   body: JSON.stringify(obra)
+  // })
+  //   .then(res => res.json())
+  //   .then(data => data);
+};
 
 export const efetueLogin = login =>
   fetch(`${api}/login`, {

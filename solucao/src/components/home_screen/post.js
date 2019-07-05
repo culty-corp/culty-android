@@ -118,7 +118,7 @@ class Card extends React.Component {
                 alignSelf: 'center'
               }}
             >
-              <Text style={styles.content}>{this.props.conteudoTexto}</Text>
+              <Text style={styles.content}>{this.props.conteudo}</Text>
             </View>
             <View style={{ flex: 1, flexWrap: 'wrap', width: '100%' }}>
               <View

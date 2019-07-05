@@ -20,21 +20,25 @@ import {
   Item,
   Input,
   Label,
-  Textarea, ListItem,
-  Radio, Right, Left,
-  Body,
+  Textarea,
+  ListItem,
+  Radio,
+  Right,
+  Left,
+  Body
 } from 'native-base';
 import { cinzaClaro, cinzaEscuro, corTexto, laranjaEscuro } from '../../style';
 import { getColor } from '../config';
-import * as Maps from '../Maps'
+import * as Maps from '../Maps';
 import { firebaseApp } from '../../firebase';
 import { connect } from 'react-redux';
 import CameraRollPicker from 'react-native-camera-roll-picker';
 
-
 export class CreateNew extends Component {
   constructor(props) {
     super(props);
+
+    console.log(this.props.currentUser);
 
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -43,37 +47,72 @@ export class CreateNew extends Component {
 
   state = {
     titulo: '',
-    conteudoTexto: '',
+    conteudo: '',
     resumo: '',
     texto: true,
     imagem: false,
     video: false,
-    audio: false
-  }
+    audio: false,
+    uid: this.props.currentUser.uid
+  };
 
   submit = () => {
+    this.setState({
+      postStatus: 'Posting...'
+    });
 
-    const { titulo, resumo, conteudoTexto } = this.state;
+    const { titulo, resumo, conteudo, uid } = this.state;
 
-    const post = {
-      usuario: this.props.usuarioLogado,
+    const postData = {
+      usuario: {
+        id: this.props.currentUser.uid,
+        nome: this.props.currentUser.name
+      },
       titulo,
       tipoMidia: 'Texto',
       resumo,
-      conteudoTexto,
-      filtros: ["mpb", "rock"]
+      conteudo,
+      filtros: ['mpb', 'rock']
     };
 
-    this.props.adicionarPost(post).then(() => {
-      this.props.getAllObras()
-    })
+    const newPostKey = firebaseApp
+      .database()
+      .ref()
+      .child('posts')
+      .push().key;
 
-    this.setState({ titulo: '', resumo: '', conteudoTexto: '' });
-  }
+    let updates = {};
+    updates['/posts/' + newPostKey] = postData;
+    updates['/users/' + uid + '/posts/' + newPostKey] = postData;
+
+    firebaseApp
+      .database()
+      .ref()
+      .update(updates)
+      .then(() => {
+        this.setState({ postStatus: 'Posted! Thank You.', postText: '' });
+      })
+      .then(() => {
+        this.props.getAllObras();
+        this.setState({ titulo: '', resumo: '', conteudo: '' });
+      })
+      .catch(() => {
+        this.setState({ postStatus: 'Something went wrong!!!' });
+        this.setState({ titulo: '', resumo: '', conteudo: '' });
+      });
+
+    // this.props.adicionarPost(post).then(() => {
+    //   this.props.getAllObras();
+    // });
+
+    setTimeout(() => {
+      this.setState({ postStatus: null });
+    }, 2000);
+  };
 
   toHome = () => {
     // this.props.navigation.dispatch(NavigationActions.back())
-  }
+  };
 
   static navigationOptions = {
     drawerLabel: 'New Post',
@@ -87,44 +126,59 @@ export class CreateNew extends Component {
 
   componentDidUpdate = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-  }
+  };
 
   conteudo = () => {
     if (this.state.texto) {
       return (
         <Textarea
-          value={this.state.conteudo} onChangeText={(conteudoTexto) => { this.setState({ conteudoTexto }); }}
+          value={this.state.conteudo}
+          onChangeText={conteudo => {
+            this.setState({ conteudo });
+          }}
           rowSpan={5}
           bordered
-          placeholder="Texto" />
-      )
+          placeholder="Texto"
+        />
+      );
     } else if (this.state.audio) {
       return (
         <Textarea
-          value={this.state.conteudo} onChangeText={(conteudoTexto) => { this.setState({ conteudoTexto }); }}
+          value={this.state.conteudo}
+          onChangeText={conteudo => {
+            this.setState({ conteudo });
+          }}
           rowSpan={5}
           bordered
-          placeholder="Áudio" />
-      )
+          placeholder="Áudio"
+        />
+      );
     } else if (this.state.video) {
       return (
         <Textarea
-          value={this.state.conteudo} onChangeText={(conteudoTexto) => { this.setState({ conteudoTexto }); }}
+          value={this.state.conteudo}
+          onChangeText={conteudo => {
+            this.setState({ conteudo });
+          }}
           rowSpan={5}
           bordered
-          placeholder="Vídeo" />
-      )
+          placeholder="Vídeo"
+        />
+      );
     } else {
       return (
         <Textarea
-          value={this.state.conteudo} onChangeText={(conteudoTexto) => { this.setState({ conteudoTexto }); }}
+          value={this.state.conteudo}
+          onChangeText={conteudo => {
+            this.setState({ conteudo });
+          }}
           rowSpan={5}
           bordered
-          placeholder="Imagem" />
-      )
+          placeholder="Imagem"
+        />
+      );
     }
-
-  }
+  };
 
   render() {
     return (
@@ -138,123 +192,163 @@ export class CreateNew extends Component {
                 <Label>Titulo</Label>
                 <Input
                   value={this.state.titulo}
-                  onChangeText={(titulo) => { this.setState({ titulo }); }} />
+                  onChangeText={titulo => {
+                    this.setState({ titulo });
+                  }}
+                />
               </Item>
               <Item floatingLabel>
                 <Label>Resumo</Label>
                 <Input
-                  value={this.state.resumo} onChangeText={(resumo) => { this.setState({ resumo }); }} />
+                  value={this.state.resumo}
+                  onChangeText={resumo => {
+                    this.setState({ resumo });
+                  }}
+                />
               </Item>
               <Text>Tipo de postagem</Text>
-              <ListItem onPress={() => this.setState({ texto: true, audio: false, video: false, imagem: false })}>
+              <ListItem
+                onPress={() =>
+                  this.setState({
+                    texto: true,
+                    audio: false,
+                    video: false,
+                    imagem: false
+                  })
+                }
+              >
                 <Left>
                   <Text>Texto</Text>
                 </Left>
                 <Right>
-                  <Radio selected={this.state.texto}
-                    onPress={() => this.setState({ texto: true, audio: false, video: false, imagem: false })} />
+                  <Radio
+                    selected={this.state.texto}
+                    onPress={() =>
+                      this.setState({
+                        texto: true,
+                        audio: false,
+                        video: false,
+                        imagem: false
+                      })
+                    }
+                  />
                 </Right>
               </ListItem>
-              <ListItem onPress={() => this.setState({ texto: false, audio: false, video: false, imagem: true })}>
+              <ListItem
+                onPress={() =>
+                  this.setState({
+                    texto: false,
+                    audio: false,
+                    video: false,
+                    imagem: true
+                  })
+                }
+              >
                 <Left>
                   <Text>Imagem</Text>
                 </Left>
                 <Right>
-                  <Radio selected={this.state.imagem}
-                    onPress={() => this.setState({ texto: false, audio: false, video: false, imagem: true })} />
+                  <Radio
+                    selected={this.state.imagem}
+                    onPress={() =>
+                      this.setState({
+                        texto: false,
+                        audio: false,
+                        video: false,
+                        imagem: true
+                      })
+                    }
+                  />
                 </Right>
               </ListItem>
-              <ListItem onPress={() => this.setState({ texto: false, audio: true, video: false, imagem: false })}>
+              <ListItem
+                onPress={() =>
+                  this.setState({
+                    texto: false,
+                    audio: true,
+                    video: false,
+                    imagem: false
+                  })
+                }
+              >
                 <Left>
                   <Text>Áudio</Text>
                 </Left>
                 <Right>
                   <Radio
                     selected={this.state.audio}
-                    onPress={() => this.setState({ texto: false, audio: true, video: false, imagem: false })} />
+                    onPress={() =>
+                      this.setState({
+                        texto: false,
+                        audio: true,
+                        video: false,
+                        imagem: false
+                      })
+                    }
+                  />
                 </Right>
               </ListItem>
-              <ListItem onPress={() => this.setState({ texto: false, audio: false, video: true, imagem: false })}>
+              <ListItem
+                onPress={() =>
+                  this.setState({
+                    texto: false,
+                    audio: false,
+                    video: true,
+                    imagem: false
+                  })
+                }
+              >
                 <Left>
                   <Text>Vídeo</Text>
                 </Left>
                 <Right>
-                  <Radio selected={this.state.video}
-                    onPress={() => this.setState({ texto: false, audio: false, video: true, imagem: false })} />
+                  <Radio
+                    selected={this.state.video}
+                    onPress={() =>
+                      this.setState({
+                        texto: false,
+                        audio: false,
+                        video: true,
+                        imagem: false
+                      })
+                    }
+                  />
                 </Right>
               </ListItem>
               <Text>Conteudo</Text>
               {this.conteudo()}
             </Form>
-            <View
-              style={styleButton.containerBtn}>
+            <View style={styleButton.containerBtn}>
               <TouchableOpacity
                 onPress={() => this.submit()}
-                style={true ?
-                  styleButton.styleBtnAtive :
-                  styleButton.styleBtnInative}
-                disabled={!true}>
-                <Text style={true ?
-                  styleButton.btnTextAtive :
-                  styleButton.btnTextInative}>Postar</Text>
+                style={
+                  true ? styleButton.styleBtnAtive : styleButton.styleBtnInative
+                }
+                disabled={!true}
+              >
+                <Text
+                  style={
+                    true ? styleButton.btnTextAtive : styleButton.btnTextInative
+                  }
+                >
+                  Postar
+                </Text>
               </TouchableOpacity>
             </View>
           </Content>
         </Container>
-
       </View>
     );
   }
 
-  _handleNewPost() {
-    // this.setState({
-    //   postStatus: 'Posting...'
-    // });
-
-    // if (this.state.postText.length > 20) {
-    //   const time = Date.now();
-    //   const uid = firebaseApp.auth().currentUser.uid;
-    //   const email = firebaseApp.auth().currentUser.email;
-    //   const newPostKey = firebaseApp
-    //     .database()
-    //     .ref()
-    //     .child('posts')
-    //     .push().key;
-
-    //   const postData = {
-    //     name: firebaseApp.auth().currentUser.displayName,
-    //     time: time,
-    //     text: this.state.postText,
-    //     puid: newPostKey
-    //   };
-    //   let updates = {};
-    //   updates['/posts/' + newPostKey] = postData;
-    //   updates['/users/' + uid + '/posts/' + newPostKey] = postData;
-
-    //   firebaseApp
-    //     .database()
-    //     .ref()
-    //     .update(updates)
-    //     .then(() => {
-    //       this.setState({ postStatus: 'Posted! Thank You.', postText: '' });
-    //     })
-    //     .catch(() => {
-    //       this.setState({ postStatus: 'Something went wrong!!!' });
-    //     });
-    // } else {
-    //   this.setState({ postStatus: 'You need to post at least 20 charecters.' });
-    // }
-
-    // setTimeout(() => {
-    //   this.setState({ postStatus: null });
-    // }, 2000);
-  }
+  _handleNewPost() {}
 }
 
 function mapStateToProps(state) {
-  const postagens = state.postsCulty.postagens
-  const usuarioLogado = state.usuario.usuarioLogado
+  const postagens = state.postsCulty.postagens;
+  const usuarioLogado = state.usuario.usuarioLogado;
   return {
+    currentUser: state.currentUser,
     postagens,
     usuarioLogado
   };
@@ -327,10 +421,10 @@ const cores = {
 
 const styleButton = StyleSheet.create({
   containerBtn: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginBottom: 20,
     justifyContent: 'space-between',
-    padding: 15,
+    padding: 15
   },
   styleBtnAtive: {
     paddingLeft: 15,
@@ -342,11 +436,11 @@ const styleButton = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 2,
     borderRadius: 5,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   btnTextAtive: {
     color: cores.textoBotao,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   styleBtnInative: {
     paddingLeft: 15,
@@ -358,10 +452,10 @@ const styleButton = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 2,
     borderRadius: 5,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   btnTextInative: {
     color: cores.textoBotao,
     fontWeight: 'bold'
-  },
-})
+  }
+});
