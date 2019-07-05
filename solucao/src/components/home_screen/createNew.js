@@ -550,15 +550,15 @@ const styleButton = StyleSheet.create({
     paddingRight: 15,
     paddingTop: 15,
     paddingBottom: 15,
-    backgroundColor: 'transparent',
-    borderColor: cores.botaoAtivo,
+    backgroundColor: laranja,
+    borderColor: laranja,
     borderStyle: 'solid',
     borderWidth: 2,
     borderRadius: 5,
     justifyContent: 'center'
   },
   btnTextAtive: {
-    color: cores.textoBotao,
+    color: corTexto,
     fontWeight: 'bold'
   },
   styleBtnInative: {
@@ -566,8 +566,8 @@ const styleButton = StyleSheet.create({
     paddingRight: 15,
     paddingTop: 15,
     paddingBottom: 15,
-    backgroundColor: 'transparent',
-    borderColor: cores.botaoInativo,
+    backgroundColor: laranja,
+    borderColor: laranja,
     borderStyle: 'solid',
     borderWidth: 2,
     borderRadius: 5,
