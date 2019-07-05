@@ -19,7 +19,8 @@ import {
 // added HomeScreen to debug
 import LoginScreen from './views/login_screen';
 import HomeScreen from './views/home_screen';
-import Routes from './routes';
+import Routes from './routes/index.js';
+import RoutesNaoAutenticado from './routes/index_NaoAutenticado';
 
 // import firebase to determine which view to display
 import { cinzaEscuro, corTexto, laranja, laranjaEscuro } from './style';
@@ -69,7 +70,7 @@ class App extends Component {
       <View
         style={{ flex: 1, backgroundColor: cinzaEscuro, color: laranjaEscuro }}
       >
-        <Routes />
+        { this.props.currentUser.signInStatus ? <Routes /> : <RoutesNaoAutenticado />}
       </View>
     );
   }
