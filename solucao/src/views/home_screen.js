@@ -26,6 +26,7 @@ import Timeline from '../components/home_screen/timeline';
 import CreateNew from '../components/home_screen/createNew';
 import MyPosts from '../components/home_screen/myPosts';
 import Settings from '../components/home_screen/settings';
+import * as Maps from '../components/Maps';
 import { laranjaEscuro } from '../style';
 
 class HomeScreen extends Component {
@@ -89,7 +90,15 @@ const styles = StyleSheet.create({
   }
 });
 
+function mapStateToProps(state) {
+  const usuarioLogado = state.usuario.usuarioLogado;
+  return {
+    currentUser: firebaseApp.auth().currentUser
+  };
+}
+
 export default connect(
-  null,
+  mapStateToProps,
+  Maps.mapDispatchToProps,
   { signedOut }
-)(HomeScreen);
+)(Settings);

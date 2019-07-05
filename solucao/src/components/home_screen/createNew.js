@@ -27,7 +27,13 @@ import {
   Left,
   Body
 } from 'native-base';
-import { cinzaClaro, cinzaEscuro, corTexto, laranjaEscuro, laranja } from '../../style';
+import {
+  cinzaClaro,
+  cinzaEscuro,
+  corTexto,
+  laranjaEscuro,
+  laranja
+} from '../../style';
 import { getColor } from '../config';
 import * as Maps from '../Maps';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -233,7 +239,14 @@ export class CreateNew extends Component {
           //   bordered
           //   placeholder="Imagem"
           // />
-          <View>
+          <View
+            style={{
+              flex: 1,
+              height: '20%',
+              justifyContent: 'center',
+              alignContent: 'center'
+            }}
+          >
             <RNFileSelector
               title={'Selecione um arquivo'}
               visible={this.state.visible}
@@ -248,10 +261,14 @@ export class CreateNew extends Component {
               }}
             />
             <TouchableOpacity
-              style={{ height: '10%' }}
+              style={{
+                height: '20%',
+                justifyContent: 'center',
+                alignContent: 'center'
+              }}
               onPress={() => this.toggleFileSelector()}
             >
-              <Image source={require('../../assets/images/leek.png')} />
+              <Icon name="upload" size={30} color={laranja} />
             </TouchableOpacity>
           </View>
         );

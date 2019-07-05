@@ -14,8 +14,10 @@ import {
 import { firebaseApp } from '../../firebase';
 import { corTexto, laranja } from '../../style';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { connect } from 'react-redux';
+import * as Maps from '../Maps';
 
-export default class Settings extends Component {
+export class Settings extends Component {
   constructor(props) {
     super(props);
 
@@ -151,3 +153,15 @@ const styles = StyleSheet.create({
     height: 24
   }
 });
+
+function mapStateToProps(state) {
+  const usuarioLogado = state.usuario.usuarioLogado;
+  return {
+    currentUser: firebaseApp.auth().currentUser
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  Maps.mapDispatchToProps
+)(Settings);
