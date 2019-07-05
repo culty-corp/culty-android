@@ -39,8 +39,6 @@ const AppNavigator = createDrawerNavigator(
   {  
     Login: LoginScreen,
     Timeline: Timeline,
-    CreateNew: CreateNew,
-    MyPosts: MyPosts,
     Settings: Settings
   },
   {

@@ -40,6 +40,7 @@ class Timeline extends Component {
 
   static navigationOptions = {
     drawerLabel: 'Timeline',
+    params: {exigeLogin: false},
     drawerIcon: ({ activeTintColor }) => (
       <Image
         source={require('../../assets/images/leek.png')}
