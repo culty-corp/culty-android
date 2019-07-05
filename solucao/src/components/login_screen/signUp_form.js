@@ -68,7 +68,7 @@ export default class SignUpForm extends Component {
             autoCapitalize="words"
             autoCorrect={false}
             underlineColorAndroid="transparent"
-            placeholder="Your Name"
+            placeholder="Seu Nome"
             placeholderTextColor={corTexto}
           />
         </View>
@@ -80,7 +80,7 @@ export default class SignUpForm extends Component {
             autoCorrect={false}
             onChangeText={text => this.setState({ email: text })}
             underlineColorAndroid="transparent"
-            placeholder="Your Email"
+            placeholder="Seu Email"
             placeholderTextColor={corTexto}
           />
         </View>
@@ -90,7 +90,7 @@ export default class SignUpForm extends Component {
             value={this.state.password}
             onChangeText={text => this.setState({ password: text })}
             underlineColorAndroid="transparent"
-            placeholder="Choose Password"
+            placeholder="Escolha sua senha"
             secureTextEntry={true}
             placeholderTextColor={corTexto}
           />

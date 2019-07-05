@@ -19,10 +19,12 @@ import _ from 'lodash';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { savePosts } from '../../actions/index';
+import { StackNavigator, DrawerNavigator } from 'react-navigation'
 import { getColor } from '../config';
 import { firebaseApp } from '../../firebase';
 import Post from './post';
-import { cinzaClaro, corTexto } from '../../style';
+import { cinzaClaro, corTexto, laranja } from '../../style';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 class Timeline extends Component {
   constructor(props) {
@@ -38,16 +40,13 @@ class Timeline extends Component {
     };
   }
 
-  static navigationOptions = {
-    drawerLabel: 'Timeline',
-    params: {exigeLogin: false},
+  static navigationOptions = ({navigation}) => ({
+    drawerLabel: 'Explorar',
+    headerLeft: <Text onPress={() => navigation.navigate('DrawerOpen')}>Menu</Text>,
     drawerIcon: ({ activeTintColor }) => (
-      <Image
-        source={require('../../assets/images/leek.png')}
-        style={[styles.icon, { activeTintColor: activeTintColor }]}
-      />
+      <Icon name="compass" size={30} color={laranja} />
     )
-  };
+  });
 
   componentDidMount() {
     if (this.props.postagens.length === 0) {
@@ -147,7 +146,6 @@ class Timeline extends Component {
     // });
     // _.reverse(postArray);
     // return postArray;
-    console.log(this.props.postagens);
     return <Post style={styles.container} cards={this.props.postagens} />;
   }
 }

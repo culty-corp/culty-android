@@ -27,9 +27,10 @@ import {
   Left,
   Body
 } from 'native-base';
-import { cinzaClaro, cinzaEscuro, corTexto, laranjaEscuro } from '../../style';
+import { cinzaClaro, cinzaEscuro, corTexto, laranjaEscuro, laranja } from '../../style';
 import { getColor } from '../config';
 import * as Maps from '../Maps';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { firebaseApp } from '../../firebase';
 import { connect } from 'react-redux';
 import CameraRollPicker from 'react-native-camera-roll-picker';
@@ -193,12 +194,9 @@ export class CreateNew extends Component {
   };
 
   static navigationOptions = {
-    drawerLabel: 'New Post',
+    drawerLabel: 'Novo Post',
     drawerIcon: ({ activeTintColor }) => (
-      <Image
-        source={require('../../assets/images/leek.png')}
-        style={[styles.icon, { activeTintColor: activeTintColor }]}
-      />
+      <Icon name="plus-square" size={30} color={laranja} />
     )
   };
 

@@ -36,8 +36,7 @@ const DrawerContent = props => (
 );
 
 const AppNavigator = createDrawerNavigator(
-  {  
-    Login: LoginScreen,
+  {
     Timeline: Timeline,
     CreateNew: CreateNew,
     MyPosts: MyPosts,
@@ -55,13 +54,11 @@ const AppNavigator = createDrawerNavigator(
 );
 const AppContainer = createAppContainer(AppNavigator);
 
-mapStateToProps = (state) => {
+mapStateToProps = state => {
   const stateUsuario = state.currentUser;
   return {
     ...stateUsuario
   };
-}
+};
 
-export default connect(
-  mapStateToProps,
-)(AppContainer);
+export default connect(mapStateToProps)(AppContainer);
