@@ -45,19 +45,16 @@ class MyPosts extends Component {
   };
 
   componentDidMount() {
-    if (this.props.postagens.length === 0) {
-      this.props.getAllObras();
-    }
-
     const userUid = this.props.currentUser.uid;
 
     firebaseApp
       .database()
       .ref('/users/' + userUid + '/posts/')
       .on('value', snapshot => {
+        console.log(snapshot.val());
         this.setState({
-          posts: snapshot.val(),
-          postsCount: _.size(snapshot.val())
+          posts: snapshot.val() || [],
+          postsCount: _.size(snapshot.val()) || 0
         });
       });
   }
@@ -120,7 +117,7 @@ class MyPosts extends Component {
     // });
     // _.reverse(postArray);
     // return postArray;
-    return <Post style={styles.container} cards={this.props.postagens} />;
+    return <Post style={styles.container} cards={this.state.posts} />;
   }
 
   _handleDelete(puid) {

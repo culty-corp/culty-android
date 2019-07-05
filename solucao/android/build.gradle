@@ -31,3 +31,31 @@ allprojects {
         }
     }
 }
+
+buildscript {
+  repositories {
+     google()
+     jcenter { url "http://jcenter.bintray.com/"}
+     maven { url "https://dl.bintray.com/android/android-tools" }
+  }
+}
+
+subprojects { project ->
+  def name = project.name
+  if (name.contains('module name, e.g. react-native-blur')
+        || name.contains('other module name, e.g. react-native-image-picker')) {
+    buildscript {
+        repositories {
+            maven { url "https://dl.bintray.com/android/android-tools/"  }
+        }
+    }
+  } 
+}
+
+configurations.all {
+   resolutionStrategy {
+       force 'com.android.support:design:27.0.2'
+       force 'com.android.support:support-v4:27.0.2'
+       force 'com.android.support:appcompat-v7:27.0.2'
+   }
+}

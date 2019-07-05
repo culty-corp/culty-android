@@ -11,7 +11,7 @@ const initialStatePosts = {
       tipoMidia: 'Imagem',
       resumo:
         'Arte que criei enquanto observava universitários em fim de semestre.',
-      conteudo: require(`../assets/images/ogrito.jpg`),
+      conteudo: 'https://www.edvardmunch.org/images/paintings/the-scream.jpg',
       filtros: ['#pintura', '#impressionismo']
     },
     {
@@ -19,7 +19,8 @@ const initialStatePosts = {
       titulo: 'Quem te viu, quem te vê',
       tipoMidia: 'Audio',
       resumo: 'Um dia eu vi uma garota para nunca mais, criei essa música.',
-      conteudo: require(`../assets/images/miku.jpg`),
+      conteudo:
+        'http://theplaidzebra.com/wp-content/uploads/2014/11/Hatsune-Miku_Plaid-Zebra.jpg',
       filtros: ['#música', '#mpb']
     }
   ]
@@ -64,7 +65,7 @@ export default (postsCulty = (state = initialStatePosts, action) => {
       console.log(`reducer obras: `);
       console.log(action.obras);
       console.log(state.postagensFake);
-      const newPostagens = Object.values(action.obras);
+      const newPostagens = Object.values(action.obras || {});
       console.log(newPostagens);
       postagens = [...state.postagensFake, ...newPostagens];
       console.log(`reducerpostagens: `);

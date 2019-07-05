@@ -33,6 +33,8 @@ import * as Maps from '../Maps';
 import { firebaseApp } from '../../firebase';
 import { connect } from 'react-redux';
 import CameraRollPicker from 'react-native-camera-roll-picker';
+import RNFileSelector from 'react-native-file-selector';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 export class CreateNew extends Component {
   constructor(props) {
@@ -53,7 +55,58 @@ export class CreateNew extends Component {
     imagem: false,
     video: false,
     audio: false,
+    visible: false,
     uid: this.props.currentUser.uid
+  };
+
+  tipoMidiaHandler = () => {
+    const { texto, imagem, video } = this.state;
+    return texto ? 'Texto' : imagem ? 'Imagem' : video ? 'Video' : 'Audio';
+  };
+
+  uploadImage = uri => {
+    const Blob = RNFetchBlob.polyfill.Blob;
+    const fs = RNFetchBlob.fs;
+    window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
+    window.Blob = Blob;
+    const mime = 'application/octet-stream';
+
+    return new Promise((resolve, reject) => {
+      const uploadUri =
+        Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+      const sessionId = new Date().getTime();
+      let uploadBlob = null;
+      const imageRef = firebaseApp
+        .storage()
+        .ref('images')
+        .child(`${sessionId}`);
+      console.log(imageRef);
+
+      fs.readFile(uploadUri, 'base64')
+        .then(data => {
+          console.log(data);
+          return Blob.build(data, { type: `${mime};BASE64` });
+        })
+        .then(blob => {
+          uploadBlob = blob;
+          console.log(uploadBlob);
+          return imageRef.put(blob, { contentType: mime });
+        })
+        .then(() => {
+          console.log(uploadBlob);
+          uploadBlob.close();
+          return imageRef.getDownloadURL();
+        })
+        .then(url => {
+          console.log('url');
+          console.log(url);
+          resolve(url);
+        })
+        .catch(error => {
+          console.log('couldnt read file');
+          reject(error);
+        });
+    });
   };
 
   submit = () => {
@@ -61,43 +114,68 @@ export class CreateNew extends Component {
       postStatus: 'Posting...'
     });
 
+    console.log('posting');
+
     const { titulo, resumo, conteudo, uid } = this.state;
 
-    const postData = {
-      usuario: {
-        id: this.props.currentUser.uid,
-        nome: this.props.currentUser.name
-      },
-      titulo,
-      tipoMidia: 'Texto',
-      resumo,
-      conteudo,
-      filtros: ['mpb', 'rock']
-    };
+    this.uploadImage(conteudo)
+      .then(res => {
+        this.setState({ conteudo: res });
 
-    const newPostKey = firebaseApp
-      .database()
-      .ref()
-      .child('posts')
-      .push().key;
+        console.log(res);
+        const postData = {
+          usuario: {
+            id: this.props.currentUser.uid,
+            nome: this.props.currentUser.name
+          },
+          titulo,
+          tipoMidia: this.tipoMidiaHandler(),
+          resumo,
+          conteudo: res,
+          filtros: ['mpb', 'rock']
+        };
 
-    let updates = {};
-    updates['/posts/' + newPostKey] = postData;
-    updates['/users/' + uid + '/posts/' + newPostKey] = postData;
+        const newPostKey = firebaseApp
+          .database()
+          .ref()
+          .child('posts')
+          .push().key;
 
-    firebaseApp
-      .database()
-      .ref()
-      .update(updates)
-      .then(() => {
-        this.setState({ postStatus: 'Posted! Thank You.', postText: '' });
+        let updates = {};
+        updates['/posts/' + newPostKey] = postData;
+        updates['/users/' + uid + '/posts/' + newPostKey] = postData;
+
+        firebaseApp
+          .database()
+          .ref()
+          .update(updates)
+          .then(() => {
+            this.setState({
+              postStatus: 'Publicado!',
+              postText: ''
+            });
+          })
+          .then(() => {
+            this.props.getAllObras();
+            this.setState({ titulo: '', resumo: '', conteudo: '' });
+          })
+          .catch(() => {
+            this.setState({
+              postStatus: 'Não conseguimos enviar seu post!!!!'
+            });
+            this.setState({ titulo: '', resumo: '', conteudo: '' });
+          });
+
+        switch (this.tipoMidiaHandler()) {
+          case 'Texto':
+
+          case 'Imagem':
+          case 'Video':
+          case 'Audio':
+        }
       })
-      .then(() => {
-        this.props.getAllObras();
-        this.setState({ titulo: '', resumo: '', conteudo: '' });
-      })
-      .catch(() => {
-        this.setState({ postStatus: 'Something went wrong!!!' });
+      .catch(err => {
+        this.setState({ postStatus: 'Não conseguimos enviar seu post!!!!' });
         this.setState({ titulo: '', resumo: '', conteudo: '' });
       });
 
@@ -128,55 +206,81 @@ export class CreateNew extends Component {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
   };
 
+  toggleFileSelector = () => {
+    this.setState({ visible: !this.state.visible });
+  };
+
   conteudo = () => {
-    if (this.state.texto) {
-      return (
-        <Textarea
-          value={this.state.conteudo}
-          onChangeText={conteudo => {
-            this.setState({ conteudo });
-          }}
-          rowSpan={5}
-          bordered
-          placeholder="Texto"
-        />
-      );
-    } else if (this.state.audio) {
-      return (
-        <Textarea
-          value={this.state.conteudo}
-          onChangeText={conteudo => {
-            this.setState({ conteudo });
-          }}
-          rowSpan={5}
-          bordered
-          placeholder="Áudio"
-        />
-      );
-    } else if (this.state.video) {
-      return (
-        <Textarea
-          value={this.state.conteudo}
-          onChangeText={conteudo => {
-            this.setState({ conteudo });
-          }}
-          rowSpan={5}
-          bordered
-          placeholder="Vídeo"
-        />
-      );
-    } else {
-      return (
-        <Textarea
-          value={this.state.conteudo}
-          onChangeText={conteudo => {
-            this.setState({ conteudo });
-          }}
-          rowSpan={5}
-          bordered
-          placeholder="Imagem"
-        />
-      );
+    switch (this.tipoMidiaHandler()) {
+      case 'Texto':
+        return (
+          <Textarea
+            value={this.state.conteudo}
+            onChangeText={conteudo => {
+              this.setState({ conteudo });
+            }}
+            rowSpan={5}
+            bordered
+            placeholder="Texto"
+          />
+        );
+      case 'Imagem':
+        return (
+          // <Textarea
+          //   value={this.state.conteudo}
+          //   onChangeText={conteudo => {
+          //     this.setState({ conteudo });
+          //   }}
+          //   rowSpan={5}
+          //   bordered
+          //   placeholder="Imagem"
+          // />
+          <View>
+            <RNFileSelector
+              title={'Selecione um arquivo'}
+              visible={this.state.visible}
+              onDone={path => {
+                this.toggleFileSelector();
+                console.log('file selected: ' + path);
+                this.setState({ conteudo: path });
+              }}
+              onCancel={() => {
+                this.toggleFileSelector();
+                console.log('cancelled');
+              }}
+            />
+            <TouchableOpacity
+              style={{ height: '10%' }}
+              onPress={() => this.toggleFileSelector()}
+            >
+              <Image source={require('../../assets/images/leek.png')} />
+            </TouchableOpacity>
+          </View>
+        );
+      case 'Video':
+        return (
+          <Textarea
+            value={this.state.conteudo}
+            onChangeText={conteudo => {
+              this.setState({ conteudo });
+            }}
+            rowSpan={5}
+            bordered
+            placeholder="Vídeo"
+          />
+        );
+      case 'Audio':
+        return (
+          <Textarea
+            value={this.state.conteudo}
+            onChangeText={conteudo => {
+              this.setState({ conteudo });
+            }}
+            rowSpan={5}
+            bordered
+            placeholder="Áudio"
+          />
+        );
     }
   };
 

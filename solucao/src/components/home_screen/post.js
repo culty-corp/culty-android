@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { getColor } from '../config';
 import { corTexto, cinzaClaro } from '../../style';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import ResponsiveImage from 'react-native-responsive-image';
 
 class Posts extends Component {
   constructor(props) {
@@ -85,6 +86,28 @@ class Card extends React.Component {
     alert('you followed the person : ]');
   };
 
+  contentRender = mediaType => {
+    console.log(mediaType);
+    switch (mediaType) {
+      case 'Texto':
+        return <Text style={styles.content}>{this.props.conteudo}</Text>;
+      case 'Imagem':
+        return (
+          <ResponsiveImage
+            source={{ uri: this.props.conteudo }}
+            initWidth="240"
+            initHeight="360"
+          />
+        );
+      case 'Video':
+        return <Text style={styles.content}>{this.props.conteudo}</Text>;
+      case 'Audio':
+        return <Text style={styles.content}>{this.props.conteudo}</Text>;
+      default:
+        return <Text style={styles.content}>{this.props.conteudo}</Text>;
+    }
+  };
+
   render() {
     return (
       <View
@@ -105,7 +128,7 @@ class Card extends React.Component {
               {this.props.usuario.nome}
             </Text>
             <Text style={[styles.content, { flex: 1, flexWrap: 'wrap' }]}>
-              {this.props.titulo} + {this.props.tipo}
+              {this.props.titulo}
             </Text>
             <View
               style={{
@@ -115,7 +138,7 @@ class Card extends React.Component {
                 alignSelf: 'center'
               }}
             >
-              <Text style={styles.content}>{this.props.conteudo}</Text>
+              {this.contentRender(this.props.tipoMidia)}
             </View>
             <View style={{ flex: 1, flexWrap: 'wrap', width: '100%' }}>
               <View
@@ -203,6 +226,7 @@ const styles = StyleSheet.create({
     elevation: 1
   },
   noMoreCardsText: {
-    fontSize: 22
+    fontSize: 22,
+    color: corTexto
   }
 });
