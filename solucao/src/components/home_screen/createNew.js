@@ -4,22 +4,33 @@
 
 import React, { Component } from 'react';
 import {
-  Text,
-  View,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   LayoutAnimation,
   Platform,
   UIManager,
   Image
 } from 'react-native';
-import { Container, Content, Form, Item, Input, Label, Textarea } from 'native-base';
+import {
+  Container,
+  Text,
+  View,
+  Content,
+  Form,
+  Item,
+  Input,
+  Label,
+  Textarea, ListItem,
+  Radio, Right, Left,
+  Body,
+} from 'native-base';
 import { cinzaClaro, cinzaEscuro, corTexto, laranjaEscuro } from '../../style';
 import { getColor } from '../config';
 import * as Maps from '../Maps'
 import { firebaseApp } from '../../firebase';
 import { connect } from 'react-redux';
+import CameraRollPicker from 'react-native-camera-roll-picker';
+
 
 export class CreateNew extends Component {
   constructor(props) {
@@ -34,6 +45,10 @@ export class CreateNew extends Component {
     titulo: '',
     conteudoTexto: '',
     resumo: '',
+    texto: true,
+    imagem: false,
+    video: false,
+    audio: false
   }
 
   submit = () => {
@@ -41,17 +56,17 @@ export class CreateNew extends Component {
     const { titulo, resumo, conteudoTexto } = this.state;
 
     const post = {
-      usuario: { id: "5ccda98baacad326400e9195", nome: "saulocalixto", },
+      usuario: this.props.usuarioLogado,
       titulo,
       tipoMidia: 'Texto',
       resumo,
       conteudoTexto,
-      filtros : ["mpb", "rock"]
-  };
+      filtros: ["mpb", "rock"]
+    };
 
-  this.props.adicionarPost(post).then(() => {
-    this.props.getAllObras()
-})
+    this.props.adicionarPost(post).then(() => {
+      this.props.getAllObras()
+    })
 
     this.setState({ titulo: '', resumo: '', conteudoTexto: '' });
   }
@@ -70,8 +85,45 @@ export class CreateNew extends Component {
     )
   };
 
-  componentDidUpdate() {
+  componentDidUpdate = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+  }
+
+  conteudo = () => {
+    if (this.state.texto) {
+      return (
+        <Textarea
+          value={this.state.conteudo} onChangeText={(conteudoTexto) => { this.setState({ conteudoTexto }); }}
+          rowSpan={5}
+          bordered
+          placeholder="Texto" />
+      )
+    } else if (this.state.audio) {
+      return (
+        <Textarea
+          value={this.state.conteudo} onChangeText={(conteudoTexto) => { this.setState({ conteudoTexto }); }}
+          rowSpan={5}
+          bordered
+          placeholder="Áudio" />
+      )
+    } else if (this.state.video) {
+      return (
+        <Textarea
+          value={this.state.conteudo} onChangeText={(conteudoTexto) => { this.setState({ conteudoTexto }); }}
+          rowSpan={5}
+          bordered
+          placeholder="Vídeo" />
+      )
+    } else {
+      return (
+        <Textarea
+          value={this.state.conteudo} onChangeText={(conteudoTexto) => { this.setState({ conteudoTexto }); }}
+          rowSpan={5}
+          bordered
+          placeholder="Imagem" />
+      )
+    }
+
   }
 
   render() {
@@ -79,41 +131,76 @@ export class CreateNew extends Component {
       <View style={styles.container}>
         <Text style={styles.title}>{'Nova postagem'.toUpperCase()}</Text>
         <Text style={styles.message}>Crie um novo post</Text>
-        <Container style={{ padding: 10, backgroundColor: 'white' }}>
-        <Content>
-          <Form>
-          <Item floatingLabel>
-              <Label>Titulo</Label>
-              <Input
-              value={this.state.titulo}
-                onChangeText={(titulo) => { this.setState({ titulo }); }} />
-            </Item>
-            <Item floatingLabel>
-              <Label>Resumo</Label>
-              <Input
-                value={this.state.resumo} onChangeText={(resumo) => { this.setState({ resumo }); }}/>
-            </Item>
-            <Textarea 
-              value={this.state.conteudo} onChangeText={(conteudoTexto) => { this.setState({ conteudoTexto }); }} 
-              rowSpan={5} 
-              bordered 
-              placeholder="Conteúdo" />
-          </Form>
-          <View
-            style={styleButton.containerBtn}>
-            <TouchableOpacity
-              onPress={() => this.submit()}
-              style={ true ? 
-                styleButton.styleBtnAtive : 
-                styleButton.styleBtnInative }
-              disabled={!true}>
-              <Text style={ true ? 
-                styleButton.btnTextAtive : 
-                styleButton.btnTextInative }>Postar</Text>
-            </TouchableOpacity>
-          </View>
-        </Content>
-      </Container>
+        <Container style={{ padding: 10, backgroundColor: cinzaClaro }}>
+          <Content>
+            <Form>
+              <Item floatingLabel>
+                <Label>Titulo</Label>
+                <Input
+                  value={this.state.titulo}
+                  onChangeText={(titulo) => { this.setState({ titulo }); }} />
+              </Item>
+              <Item floatingLabel>
+                <Label>Resumo</Label>
+                <Input
+                  value={this.state.resumo} onChangeText={(resumo) => { this.setState({ resumo }); }} />
+              </Item>
+              <Text>Tipo de postagem</Text>
+              <ListItem onPress={() => this.setState({ texto: true, audio: false, video: false, imagem: false })}>
+                <Left>
+                  <Text>Texto</Text>
+                </Left>
+                <Right>
+                  <Radio selected={this.state.texto}
+                    onPress={() => this.setState({ texto: true, audio: false, video: false, imagem: false })} />
+                </Right>
+              </ListItem>
+              <ListItem onPress={() => this.setState({ texto: false, audio: false, video: false, imagem: true })}>
+                <Left>
+                  <Text>Imagem</Text>
+                </Left>
+                <Right>
+                  <Radio selected={this.state.imagem}
+                    onPress={() => this.setState({ texto: false, audio: false, video: false, imagem: true })} />
+                </Right>
+              </ListItem>
+              <ListItem onPress={() => this.setState({ texto: false, audio: true, video: false, imagem: false })}>
+                <Left>
+                  <Text>Áudio</Text>
+                </Left>
+                <Right>
+                  <Radio
+                    selected={this.state.audio}
+                    onPress={() => this.setState({ texto: false, audio: true, video: false, imagem: false })} />
+                </Right>
+              </ListItem>
+              <ListItem onPress={() => this.setState({ texto: false, audio: false, video: true, imagem: false })}>
+                <Left>
+                  <Text>Vídeo</Text>
+                </Left>
+                <Right>
+                  <Radio selected={this.state.video}
+                    onPress={() => this.setState({ texto: false, audio: false, video: true, imagem: false })} />
+                </Right>
+              </ListItem>
+              <Text>Conteudo</Text>
+              {this.conteudo()}
+            </Form>
+            <View
+              style={styleButton.containerBtn}>
+              <TouchableOpacity
+                onPress={() => this.submit()}
+                style={true ?
+                  styleButton.styleBtnAtive :
+                  styleButton.styleBtnInative}
+                disabled={!true}>
+                <Text style={true ?
+                  styleButton.btnTextAtive :
+                  styleButton.btnTextInative}>Postar</Text>
+              </TouchableOpacity>
+            </View>
+          </Content>
+        </Container>
 
       </View>
     );
@@ -166,8 +253,10 @@ export class CreateNew extends Component {
 
 function mapStateToProps(state) {
   const postagens = state.postsCulty.postagens
+  const usuarioLogado = state.usuario.usuarioLogado
   return {
-    postagens
+    postagens,
+    usuarioLogado
   };
 }
 
