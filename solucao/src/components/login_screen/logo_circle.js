@@ -4,9 +4,9 @@
  */
 
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { getColor } from '../config';
-import { laranjaEscuro, corTexto } from '../../style';
+import { cinzaClaro, corTexto } from '../../style';
 
 export default class LogoCircle extends Component {
   constructor(props) {
@@ -16,7 +16,10 @@ export default class LogoCircle extends Component {
   render() {
     return (
       <View style={styles.logoContainer}>
-        <Text style={styles.logoText}>MP</Text>
+        <Image
+        source={require('../../assets/images/logo.png')}
+        style={{ resizeMode: 'cover' }}
+      />
       </View>
     );
   }
@@ -26,7 +29,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     height: 180,
     width: 180,
-    backgroundColor: laranjaEscuro,
+    backgroundColor: cinzaClaro,
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',

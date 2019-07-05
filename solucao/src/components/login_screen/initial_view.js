@@ -29,16 +29,15 @@ export default class InitialView extends Component {
         delay={this.props.animDelay}
         onAnimationEnd={this._handleAnimEnd.bind(this)}
       >
-        <Text style={styles.title}>Mister Poster</Text>
         <View style={styles.btnBox}>
           <TouchableOpacity onPress={this._handleSignInPress.bind(this)}>
             <View style={styles.btnContainer}>
-              <Text style={styles.btnText}>{'Sign In'.toUpperCase()}</Text>
+              <Text style={styles.btnText}>{'Login'.toUpperCase()}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={this._handleSignUpPress.bind(this)}>
             <View style={styles.btnContainer}>
-              <Text style={styles.btnText}>{'Sign Up'.toUpperCase()}</Text>
+              <Text style={styles.btnText}>{'Registrar'.toUpperCase()}</Text>
             </View>
           </TouchableOpacity>
         </View>

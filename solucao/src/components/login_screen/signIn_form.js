@@ -64,7 +64,7 @@ class SignInForm extends Component {
         style={styles.container}
         onAnimationEnd={this._handleAnimEnd.bind(this)}
       >
-        <Text style={styles.title}>Sign In</Text>
+        <Text style={styles.title}>Login</Text>
         {errorMessage}
         <View style={[styles.inputContainer, { marginBottom: 10 }]}>
           <TextInput
@@ -92,13 +92,13 @@ class SignInForm extends Component {
           <TouchableOpacity onPress={this._handleForgotPassword.bind(this)}>
             <View style={styles.forgotBtnContainer}>
               <Text style={styles.forgotBtn}>
-                {'Forgot Password?'.toUpperCase()}
+                {'Esqueceu sua senha?'.toUpperCase()}
               </Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={this._handleSignIn.bind(this)}>
             <View style={styles.submitBtnContainer}>
-              <Text style={styles.submitBtn}>{"Let's Go".toUpperCase()}</Text>
+              <Text style={styles.submitBtn}>{"Entrar".toUpperCase()}</Text>
             </View>
           </TouchableOpacity>
         </View>

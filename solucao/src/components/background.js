@@ -9,6 +9,7 @@ import {
   View,
   StyleSheet
 } from 'react-native'
+import { cinzaEscuro } from '../style';
 
 export default class Background extends Component {
   constructor(props) {
@@ -18,9 +19,9 @@ export default class Background extends Component {
   render() {
     return (
       <View style={styles.backgroundContainer}>
-        <Image
+        {/* <Image
         source={this.props.imgSrouce}
-        style={styles.background}/>
+        style={styles.background}/> */}
       </View>
     )
   }
@@ -29,6 +30,7 @@ export default class Background extends Component {
 const styles = StyleSheet.create({
   backgroundContainer : {
     position: 'absolute',
+    backgroundColor: cinzaEscuro,
     top: 0,
     bottom: 0,
     left: 0,
