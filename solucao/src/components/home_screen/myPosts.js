@@ -22,7 +22,8 @@ import _ from 'lodash';
 import moment from 'moment';
 import Post from './post';
 import { firebaseApp } from '../../firebase';
-import { laranjaEscuro, corTexto } from '../../style';
+import { laranjaEscuro, corTexto, laranja } from '../../style';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 class MyPosts extends Component {
   constructor(props) {
@@ -37,10 +38,7 @@ class MyPosts extends Component {
   static navigationOptions = {
     drawerLabel: 'Perfil',
     drawerIcon: ({ activeTintColor }) => (
-      <Image
-        source={require('../../assets/images/leek.png')}
-        style={[styles.icon, { activeTintColor: activeTintColor }]}
-      />
+      <Icon name="id-badge" size={30} color={laranja} />
     )
   };
 

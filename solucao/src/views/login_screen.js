@@ -26,7 +26,8 @@ import InitialView from '../components/login_screen/initial_view';
 import SignInForm from '../components/login_screen/signIn_form';
 import SignUpForm from '../components/login_screen/signUp_form';
 import ForgotPassForm from '../components/login_screen/forgotPassword_form';
-import { laranjaEscuro } from '../style';
+import { laranjaEscuro, laranja } from '../style';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -48,10 +49,7 @@ class LoginScreen extends Component {
   static navigationOptions = {
     drawerLabel: 'Login',
     drawerIcon: ({ activeTintColor }) => (
-      <Image
-        source={require('../assets/images/leek.png')}
-        style={[styles.icon, { activeTintColor: activeTintColor }]}
-      />
+      <Icon name="sign-in" size={30} color={laranja} />
     )
   };
 

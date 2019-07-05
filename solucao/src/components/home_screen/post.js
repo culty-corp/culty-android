@@ -8,8 +8,10 @@ import SwipeCards from 'react-native-swipe-cards';
 import * as Maps from '../Maps';
 import { connect } from 'react-redux';
 import { getColor } from '../config';
-import { corTexto, cinzaClaro } from '../../style';
+import { corTexto, cinzaClaro, laranja } from '../../style';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 class Posts extends Component {
   constructor(props) {
@@ -27,7 +29,7 @@ class Posts extends Component {
   handleNope(card) {
     console.log(`Nope for ${card.text}`);
   }
-  
+
   render() {
     // If you want a stack of cards instead of one-per-one view, activate stack mode
     // stack={true}
@@ -127,16 +129,10 @@ class Card extends React.Component {
                 }}
               >
                 <TouchableOpacity onPress={this.onShare}>
-                  <Image
-                    style={{ width: 40, height: 40 }}
-                    source={require('../../assets/images/leek.png')}
-                  />
+                <Icon name="share-alt" size={30} color={laranja} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.follow(this.props.usuario.nome)}>
-                  <Image
-                    style={{ width: 40, height: 40 }}
-                    source={require('../../assets/images/leek.png')}
-                  />
+                <Icon name="heart" size={30} color={laranja} />
                 </TouchableOpacity>
               </View>
             </View>

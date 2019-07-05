@@ -12,8 +12,8 @@ import {
   Image
 } from 'react-native';
 import { firebaseApp } from '../../firebase';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { corTexto } from '../../style';
+import { corTexto, laranja } from '../../style';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class Settings extends Component {
   constructor(props) {
@@ -29,10 +29,7 @@ export default class Settings extends Component {
   static navigationOptions = {
     drawerLabel: 'Configurações',
     drawerIcon: ({ activeTintColor }) => (
-      <Image
-        source={require('../../assets/images/leek.png')}
-        style={[styles.icon, { activeTintColor: activeTintColor }]}
-      />
+      <Icon name="cog" size={30} color={laranja} />
     )
   };
 
