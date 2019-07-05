@@ -61,8 +61,15 @@ export default (postsCulty = (state = initialStatePosts, action) => {
         postagensCompletas
       };
     case 'GET_ALL_OBRAS':
-      postagens = [...state.postagensFake, ...action.obras];
-      postagensCompletas = [...state.postagensFake, ...action.obras];
+      console.log(`reducer obras: `);
+      console.log(action.obras);
+      console.log(state.postagensFake);
+      const newPostagens = Object.values(action.obras);
+      console.log(newPostagens);
+      postagens = [...state.postagensFake, ...newPostagens];
+      console.log(`reducerpostagens: `);
+      console.log(postagens);
+      postagensCompletas = [...state.postagensFake, ...newPostagens];
       return {
         ...state,
         postagens,

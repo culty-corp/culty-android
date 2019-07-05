@@ -18,7 +18,7 @@ import * as Maps from '../Maps';
 import _ from 'lodash';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { savePosts } from '../../actions';
+import { savePosts } from '../../actions/index';
 import { getColor } from '../config';
 import { firebaseApp } from '../../firebase';
 import Post from './post';
@@ -59,7 +59,7 @@ class Timeline extends Component {
       .once('value')
       .then(snapshot => {
         // this.setState({posts: snapshot.val()})
-        this.props.savePosts(snapshot.val());
+        savePosts(snapshot.val());
       })
       .catch(err => {
         console.log(err);
@@ -82,7 +82,7 @@ class Timeline extends Component {
       .ref('posts/')
       .once('value')
       .then(snapshot => {
-        this.props.savePosts(snapshot.val());
+        savePosts(snapshot.val());
         this.setState({ isRefreshing: false, updateNotification: null });
       })
       .catch(err => {
@@ -146,6 +146,7 @@ class Timeline extends Component {
     // });
     // _.reverse(postArray);
     // return postArray;
+    console.log(this.props.postagens);
     return <Post style={styles.container} cards={this.props.postagens} />;
   }
 }

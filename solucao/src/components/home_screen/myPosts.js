@@ -16,6 +16,7 @@ import {
   Image
 } from 'react-native';
 import { connect } from 'react-redux';
+import * as Maps from '../Maps';
 import { getColor } from '../config';
 import _ from 'lodash';
 import moment from 'moment';
@@ -198,4 +199,7 @@ function mapStateToProps(state) {
     postagens
   };
 }
-export default connect(mapStateToProps)(MyPosts);
+export default connect(
+  mapStateToProps,
+  Maps.mapDispatchToProps
+)(MyPosts);
