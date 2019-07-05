@@ -39,7 +39,7 @@ class Timeline extends Component {
   }
 
   static navigationOptions = {
-    drawerLabel: 'Timeline',
+    drawerLabel: 'Explorar',
     params: {exigeLogin: false},
     drawerIcon: ({ activeTintColor }) => (
       <Image
@@ -147,7 +147,6 @@ class Timeline extends Component {
     // });
     // _.reverse(postArray);
     // return postArray;
-    console.log(this.props.postagens);
     return <Post style={styles.container} cards={this.props.postagens} />;
   }
 }

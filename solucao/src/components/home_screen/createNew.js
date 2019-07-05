@@ -115,7 +115,7 @@ export class CreateNew extends Component {
   };
 
   static navigationOptions = {
-    drawerLabel: 'New Post',
+    drawerLabel: 'Novo Post',
     drawerIcon: ({ activeTintColor }) => (
       <Image
         source={require('../../assets/images/leek.png')}

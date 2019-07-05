@@ -27,7 +27,7 @@ export default class Settings extends Component {
   }
 
   static navigationOptions = {
-    drawerLabel: 'Settings',
+    drawerLabel: 'Configurações',
     drawerIcon: ({ activeTintColor }) => (
       <Image
         source={require('../../assets/images/leek.png')}

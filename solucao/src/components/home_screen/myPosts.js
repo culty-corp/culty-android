@@ -35,7 +35,7 @@ class MyPosts extends Component {
   }
 
   static navigationOptions = {
-    drawerLabel: 'Profile',
+    drawerLabel: 'Perfil',
     drawerIcon: ({ activeTintColor }) => (
       <Image
         source={require('../../assets/images/leek.png')}

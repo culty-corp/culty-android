@@ -23,12 +23,11 @@ class Posts extends Component {
   handleYup(card) {
     console.log(`Yup for ${card.text}`);
   }
+
   handleNope(card) {
     console.log(`Nope for ${card.text}`);
   }
-  handleMaybe(card) {
-    console.log(`Maybe for ${card.text}`);
-  }
+  
   render() {
     // If you want a stack of cards instead of one-per-one view, activate stack mode
     // stack={true}
@@ -37,10 +36,9 @@ class Posts extends Component {
         cards={this.props.cards}
         renderCard={cardData => <Card {...cardData} />}
         renderNoMoreCards={() => <NoMoreCards />}
+        loop={true}
         handleYup={this.handleYup}
         handleNope={this.handleNope}
-        handleMaybe={this.handleMaybe}
-        hasMaybeAction
       />
     );
   }
@@ -84,8 +82,8 @@ class Card extends React.Component {
     }
   };
 
-  follow = () => {
-    alert('you followed the person : ]');
+  follow = (usuario) => {
+    alert(`você acaba de começar a seguir: ${usuario}`);
   };
 
   render() {
@@ -134,7 +132,7 @@ class Card extends React.Component {
                     source={require('../../assets/images/leek.png')}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={this.follow}>
+                <TouchableOpacity onPress={() => this.follow(this.props.usuario.nome)}>
                   <Image
                     style={{ width: 40, height: 40 }}
                     source={require('../../assets/images/leek.png')}
