@@ -39,8 +39,6 @@ class Posts extends Component {
         renderNoMoreCards={() => <NoMoreCards />}
         handleYup={this.handleYup}
         handleNope={this.handleNope}
-        handleMaybe={this.handleMaybe}
-        hasMaybeAction
       />
     );
   }
@@ -63,11 +61,10 @@ class Card extends React.Component {
     super(props);
   }
 
-  onShare = async () => {
+  onShare = async shareMessage => {
     try {
       const result = await Share.share({
-        message:
-          'React Native | A framework for building native apps using React'
+        message: shareMessage
       });
 
       if (result.action === Share.sharedAction) {
@@ -128,7 +125,9 @@ class Card extends React.Component {
                   justifyContent: 'space-around'
                 }}
               >
-                <TouchableOpacity onPress={this.onShare}>
+                <TouchableOpacity
+                  onPress={() => this.onShare(this.props.conteudo)}
+                >
                   <Image
                     style={{ width: 40, height: 40 }}
                     source={require('../../assets/images/leek.png')}
