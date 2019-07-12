@@ -109,9 +109,9 @@ allprojects {
 }
 configurations.all {
    resolutionStrategy {
-       force 'com.android.support:design:27.0.2'
-       force 'com.android.support:support-v4:27.0.2'
-       force 'com.android.support:appcompat-v7:27.0.2'
+       force 'com.android.support:design:28.0.0'
+       force 'com.android.support:support-v4:28.0.0'
+       force 'com.android.support:appcompat-v7:28.0.0'
    }
 }
 android {
@@ -172,7 +172,7 @@ android {
 dependencies {
     implementation project(':react-native-file-selector')
     implementation project(':react-native-image-picker')
-    implementation project(':react-native-fetch-blob')
+    implementation project(':rn-fetch-blob')
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])

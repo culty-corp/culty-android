@@ -70,7 +70,11 @@ class App extends Component {
       <View
         style={{ flex: 1, backgroundColor: cinzaEscuro, color: laranjaEscuro }}
       >
-        { this.props.currentUser.signInStatus ? <Routes /> : <RoutesNaoAutenticado /> }
+        {this.props.currentUser.signInStatus ? (
+          <Routes />
+        ) : (
+          <RoutesNaoAutenticado />
+        )}
       </View>
     );
   }

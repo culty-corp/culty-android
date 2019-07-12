@@ -101,4 +101,4 @@ export default connect(
   mapStateToProps,
   Maps.mapDispatchToProps,
   { signedOut }
-)(Settings);
+)(HomeScreen);

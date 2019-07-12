@@ -96,7 +96,7 @@ class Card extends React.Component {
         return (
           <ResponsiveImage
             source={{ uri: this.props.conteudo }}
-            initWidth="240"
+            initWidth="320"
             initHeight="360"
           />
         );

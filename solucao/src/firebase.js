@@ -2,13 +2,13 @@
 import * as firebase from 'firebase';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDgatmeSXA3sFlv9eINw60IlzqAijQm8YA',
-  authDomain: 'culty-rn.firebaseapp.com',
-  databaseURL: 'https://culty-rn.firebaseio.com',
-  projectId: 'culty-rn',
-  storageBucket: 'culty-rn.appspot.com',
-  messagingSenderId: '151775851052',
-  appId: '1:151775851052:web:ad60de0dcef7cbf8'
+  apiKey: "AIzaSyDR7HI22BLiZtYnUAX5MAAfTjO9t-QK-Uw",
+  authDomain: "culty-rn-2eb19.firebaseapp.com",
+  databaseURL: "https://culty-rn-2eb19.firebaseio.com",
+  projectId: "culty-rn-2eb19",
+  storageBucket: "culty-rn-2eb19.appspot.com",
+  messagingSenderId: "401220312381",
+  appId: "1:401220312381:web:156862612646c5b3"
 };
 
 export const firebaseApp = firebase.initializeApp(firebaseConfig);

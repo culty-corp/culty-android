@@ -41,7 +41,7 @@ import { firebaseApp } from '../../firebase';
 import { connect } from 'react-redux';
 import CameraRollPicker from 'react-native-camera-roll-picker';
 import RNFileSelector from 'react-native-file-selector';
-import RNFetchBlob from 'react-native-fetch-blob';
+import RNFetchBlob from 'rn-fetch-blob';
 
 export class CreateNew extends Component {
   constructor(props) {
@@ -63,7 +63,8 @@ export class CreateNew extends Component {
     video: false,
     audio: false,
     visible: false,
-    uid: this.props.currentUser.uid
+    uid: this.props.currentUser.uid,
+    postStatus: null
   };
 
   tipoMidiaHandler = () => {
@@ -118,18 +119,17 @@ export class CreateNew extends Component {
 
   submit = () => {
     this.setState({
-      postStatus: 'Posting...'
+      postStatus: 'Postando...'
     });
 
     console.log('posting');
 
     const { titulo, resumo, conteudo, uid } = this.state;
 
-    this.uploadImage(conteudo)
-      .then(res => {
-        this.setState({ conteudo: res });
+    const type = this.tipoMidiaHandler();
 
-        console.log(res);
+    switch (type) {
+      case 'Texto':
         const postData = {
           usuario: {
             id: this.props.currentUser.uid,
@@ -138,7 +138,7 @@ export class CreateNew extends Component {
           titulo,
           tipoMidia: this.tipoMidiaHandler(),
           resumo,
-          conteudo: res,
+          conteudo: this.state.conteudo,
           filtros: ['mpb', 'rock']
         };
 
@@ -161,6 +161,9 @@ export class CreateNew extends Component {
               postStatus: 'Publicado!',
               postText: ''
             });
+            setTimeout(() => {
+              this.setState({ postStatus: null });
+            }, 2000);
           })
           .then(() => {
             this.props.getAllObras();
@@ -168,31 +171,83 @@ export class CreateNew extends Component {
           })
           .catch(() => {
             this.setState({
-              postStatus: 'Não conseguimos enviar seu post!!!!'
+              postStatus: 'Erro :('
             });
-            this.setState({ titulo: '', resumo: '', conteudo: '' });
+            setTimeout(() => {
+              this.setState({ postStatus: null });
+            }, 2000);
           });
+        break;
+      case 'Imagem':
+        this.uploadImage(conteudo)
+          .then(res => {
+            this.setState({ conteudo: res });
 
-        switch (this.tipoMidiaHandler()) {
-          case 'Texto':
+            console.log(res);
+            const postData = {
+              usuario: {
+                id: this.props.currentUser.uid,
+                nome: this.props.currentUser.name
+              },
+              titulo,
+              tipoMidia: this.tipoMidiaHandler(),
+              resumo,
+              conteudo: res,
+              filtros: ['mpb', 'rock']
+            };
 
-          case 'Imagem':
-          case 'Video':
-          case 'Audio':
-        }
-      })
-      .catch(err => {
-        this.setState({ postStatus: 'Não conseguimos enviar seu post!!!!' });
-        this.setState({ titulo: '', resumo: '', conteudo: '' });
-      });
+            const newPostKey = firebaseApp
+              .database()
+              .ref()
+              .child('posts')
+              .push().key;
+
+            let updates = {};
+            updates['/posts/' + newPostKey] = postData;
+            updates['/users/' + uid + '/posts/' + newPostKey] = postData;
+
+            firebaseApp
+              .database()
+              .ref()
+              .update(updates)
+              .then(() => {
+                this.setState({
+                  postStatus: 'Publicado!',
+                  postText: ''
+                });
+                setTimeout(() => {
+                  this.setState({ postStatus: null });
+                }, 2000);
+              })
+              .then(() => {
+                this.props.getAllObras();
+                this.setState({ titulo: '', resumo: '', conteudo: '' });
+              })
+              .catch(() => {
+                this.setState({
+                  postStatus: 'Erro :('
+                });
+                setTimeout(() => {
+                  this.setState({ postStatus: null });
+                }, 2000);
+              });
+          })
+          .catch(err => {
+            this.setState({ postStatus: 'Erro :(' });
+            setTimeout(() => {
+              this.setState({ postStatus: null });
+            }, 2000);
+          });
+        break;
+      case 'Video':
+        break;
+      case 'Audio':
+        break;
+    }
 
     // this.props.adicionarPost(post).then(() => {
     //   this.props.getAllObras();
     // });
-
-    setTimeout(() => {
-      this.setState({ postStatus: null });
-    }, 2000);
   };
 
   toHome = () => {
@@ -226,6 +281,7 @@ export class CreateNew extends Component {
             rowSpan={5}
             bordered
             placeholder="Texto"
+            style={{ width: '90%', alignSelf: 'center', color: corTexto }}
           />
         );
       case 'Imagem':
@@ -242,9 +298,10 @@ export class CreateNew extends Component {
           <View
             style={{
               flex: 1,
-              height: '20%',
+              height: '40%',
               justifyContent: 'center',
-              alignContent: 'center'
+              alignContent: 'center',
+              alignItems: 'center'
             }}
           >
             <RNFileSelector
@@ -262,13 +319,19 @@ export class CreateNew extends Component {
             />
             <TouchableOpacity
               style={{
-                height: '20%',
+                height: '100%',
                 justifyContent: 'center',
-                alignContent: 'center'
+                alignContent: 'center',
+                alignSelf: 'center'
               }}
               onPress={() => this.toggleFileSelector()}
             >
-              <Icon name="upload" size={30} color={laranja} />
+              <Icon
+                name="upload"
+                size={80}
+                color={laranja}
+                styles={{ alignSelf: 'center' }}
+              />
             </TouchableOpacity>
           </View>
         );
@@ -303,13 +366,18 @@ export class CreateNew extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>{'Nova postagem'.toUpperCase()}</Text>
-        <Text style={styles.message}>Crie um novo post</Text>
-        <Container style={{ padding: 10, backgroundColor: cinzaClaro }}>
+        <Container
+          style={{
+            backgroundColor: cinzaClaro,
+            flex: 3
+          }}
+        >
           <Content>
             <Form>
               <Item floatingLabel>
-                <Label>Titulo</Label>
+                <Label style={styles.label}>Titulo</Label>
                 <Input
+                  style={styles.label}
                   value={this.state.titulo}
                   onChangeText={titulo => {
                     this.setState({ titulo });
@@ -317,15 +385,18 @@ export class CreateNew extends Component {
                 />
               </Item>
               <Item floatingLabel>
-                <Label>Resumo</Label>
+                <Label style={styles.label}>Resumo</Label>
                 <Input
+                  style={styles.label}
                   value={this.state.resumo}
                   onChangeText={resumo => {
                     this.setState({ resumo });
                   }}
                 />
               </Item>
-              <Text>Tipo de postagem</Text>
+              <Text style={{ ...styles.title, marginTop: 15 }}>
+                Tipo de postagem
+              </Text>
               <ListItem
                 onPress={() =>
                   this.setState({
@@ -337,7 +408,7 @@ export class CreateNew extends Component {
                 }
               >
                 <Left>
-                  <Text>Texto</Text>
+                  <Text style={styles.label}>Texto</Text>
                 </Left>
                 <Right>
                   <Radio
@@ -364,7 +435,7 @@ export class CreateNew extends Component {
                 }
               >
                 <Left>
-                  <Text>Imagem</Text>
+                  <Text style={styles.label}>Imagem</Text>
                 </Left>
                 <Right>
                   <Radio
@@ -391,7 +462,7 @@ export class CreateNew extends Component {
                 }
               >
                 <Left>
-                  <Text>Áudio</Text>
+                  <Text style={styles.label}>Áudio</Text>
                 </Left>
                 <Right>
                   <Radio
@@ -418,7 +489,7 @@ export class CreateNew extends Component {
                 }
               >
                 <Left>
-                  <Text>Vídeo</Text>
+                  <Text style={styles.label}>Vídeo</Text>
                 </Left>
                 <Right>
                   <Radio
@@ -434,7 +505,7 @@ export class CreateNew extends Component {
                   />
                 </Right>
               </ListItem>
-              <Text>Conteudo</Text>
+              <Text style={{ ...styles.title, marginTop: 15 }}>Conteudo</Text>
               {this.conteudo()}
             </Form>
             <View style={styleButton.containerBtn}>
@@ -450,7 +521,7 @@ export class CreateNew extends Component {
                     true ? styleButton.btnTextAtive : styleButton.btnTextInative
                   }
                 >
-                  Postar
+                  {this.state.postStatus ? this.state.postStatus : 'Postar'}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -480,20 +551,23 @@ export default connect(
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 10
+    flex: 0.9,
+    justifyContent: 'space-around',
+    alignSelf: 'center',
+    width: '90%'
   },
   title: {
-    marginTop: 10,
-    paddingBottom: 10,
+    flex: 1,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    textAlign: 'center',
+    textAlignVertical: 'center',
     fontFamily: 'Roboto-Bold',
     fontSize: 15,
     color: corTexto
   },
-  message: {
-    textAlign: 'left',
-    paddingTop: 10,
-    paddingBottom: 0
+  label: {
+    color: corTexto
   },
   inputContainer: {
     flex: 1,
@@ -542,7 +616,8 @@ const styleButton = StyleSheet.create({
   containerBtn: {
     flexDirection: 'row',
     marginBottom: 20,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    alignSelf: 'center',
     padding: 15
   },
   styleBtnAtive: {

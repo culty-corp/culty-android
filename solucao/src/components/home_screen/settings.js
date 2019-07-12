@@ -52,10 +52,7 @@ export class Settings extends Component {
   render() {
     return (
       <View>
-        <TouchableOpacity
-          style={styles.listItem}
-          onPress={this._logOut.bind(this)}
-        >
+        <TouchableOpacity style={styles.listItem} onPress={this._logOut()}>
           <Icon
             name="md-log-out"
             size={30}
@@ -86,20 +83,16 @@ export class Settings extends Component {
   }
 
   _logOut() {
-    this.props.onLogOut !== null
-      ? this.props.onLogOut()
-      : () => {
-          firebaseApp
-            .auth()
-            .signOut()
-            .then(() => {
-              this.props.navigator.pop();
-              this.props.signedOut();
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        };
+    firebaseApp
+      .auth()
+      .signOut()
+      .then(() => {
+        this.props.naviagation.navigate('Timeline');
+        this.props.signedOut();
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   _deleteAccount() {
